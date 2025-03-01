@@ -5,7 +5,7 @@ https://www.youtube.com/watch?v=SqcY0GlETPk
 ## 大致概念
 
 - 以 TS 包裝
-- Function return DOM
+- Function return JSX (React Virtual DOM)
 
 ## 基礎先備知識
 
@@ -15,7 +15,7 @@ https://www.youtube.com/watch?v=SqcY0GlETPk
 
 ## 大致介紹
 
-- 最廣泛使用的 App Building JS Lib
+- 最廣泛使用的 App Building JS Library
 - 可重複利用 Component
 - 區塊動態更新 (React DOM)
 
@@ -26,11 +26,11 @@ https://www.youtube.com/watch?v=SqcY0GlETPk
   - React 是 Library，主要處理 UI，因此需要其他 Library 幫忙處理其他事務（eg. Routing, HTTP, Animation...）
   - 推薦 Library
     - Bootstrap (CSS)
-    -
 
 ## 環境設定
 
-- Node.js 19 up
+- Node.js 19+
+- Snippet Extension - ES7+ React Snippet
 
 ## Create APP Steps
 
@@ -77,12 +77,12 @@ https://www.youtube.com/watch?v=SqcY0GlETPk
 
 ## 建立 Component
 
-現在大部分會使用 "Functionn-based" Component，更簡潔與簡單。但舊專案可能會是 "Class-based Component"。
+現在大部分會使用 "Function-based" Component，更簡潔與簡單。但舊專案可能會是 "Class-based Component"。
 
 - 建議 function name 使用 PascalCasing (AKA. Upper Camel Case)
 - 使用 return JSX 的方式編譯成 JS
 
-```ts
+```jsx
 // Message.tsx
 function Message() {
   // JSX: JS XML
@@ -107,7 +107,7 @@ export default App;
 
 - 可搭配 JS 語法使用
 
-```ts
+```jsx
 function Message() {
   const name = "Fish";
   if (name) return <h1>Hello {name}</h1>;
@@ -123,7 +123,7 @@ export default Message;
 - Fragment 可以代替 div 做 group，編譯後就不會有 div。
   - 可以用 <></> 替代 <Fragment>，效果一樣，更簡潔
 
-```ts
+```jsx
 function ListGroup() {
   return (
     <>
@@ -140,4 +140,110 @@ function ListGroup() {
 }
 
 export default ListGroup;
+```
+
+- return 可用 {} 內包 JS 邏輯
+
+```jsx
+function ListGroup() {
+  let items = ["New York", "San Francisco", "Tokyo", "London", ".w."];
+  // items = [];
+  const message = items.length === 0 && <p>No item</p>;
+
+  return (
+    <>
+      <h1>Hello</h1>
+      {message}
+      <ul className="list-group">
+        {items.map((item) => (
+          <li className="list-group-item" key={item}>
+            {item}
+          </li>
+        ))}
+      </ul>
+    </>
+  );
+}
+
+export default ListGroup;
+```
+
+### Component Status
+
+- 透過 useState() 作為 Hook 以便幫助 return 做跨域傳值
+- 每個 Component 的 State 是獨立的
+
+```jsx
+const [selectedIndex, setSelectedIndex] = useState(-1);
+// useState 定義形別和預設值，array 後面的值可以更改前面的值
+
+return (
+  <ul className="list-group">
+    {items.map((item, index) => (
+      <li
+        className={
+          selectedIndex === index ? "list-group-item active" : "list-group-item"
+        }
+        key={item}
+        onClick={() => {
+          setSelectedIndex(index);
+          // setSelected 作為 function 透過 useState 將值改為 index
+        }}
+      >
+        {item}
+      </li>
+    ))}
+  </ul>
+);
+```
+
+### Props 屬性
+
+用於接收屬性設定
+
+- props interface
+
+```jsx
+interface ListGroupProps {
+  items: string[];
+  heading: string;
+}
+
+function ListGroup({ items, heading }: ListGroupProps) {}
+```
+
+- 所有型別都可以包，包含 void
+
+### 子元素
+
+- props 如果叫 children 就可以直接把傳直寫在 Component Tag 內
+- children 型別用 ReactNode 即可在 Component Tag 內使用其他 HTML Tag
+
+```jsx
+// Alert.tsx
+import { ReactNode } from "react";
+
+interface Props {
+  children: ReactNode;
+}
+
+const Alert = ({ children }: Props) => {
+  return <div className="alert alert-primary">{children}</div>;
+};
+
+export default Alert;
+
+// App.tsx
+
+import Alert from "./components/Alert";
+
+function App() {
+  return (
+    <div id="App">
+      <Alert><p>.w.<br/>.w.</p></Alert>
+    </div>
+  );
+}
+
+export default App;
 ```

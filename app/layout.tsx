@@ -1,15 +1,29 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
+import {
+  Geist,
+  Geist_Mono,
+  Inter,
+  Noto_Sans_TC,
+  Dela_Gothic_One,
+} from "next/font/google";
 import "./globals.css";
 import styles from "./layout.module.css";
-const geistSans = Geist({
-  variable: "--font-geist-sans",
+import { Menu, Github, Instagram } from "lucide-react";
+
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
 });
 
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
+const notoSansTC = Noto_Sans_TC({
+  variable: "--font-noto-sans-tc",
   subsets: ["latin"],
+});
+
+const delaGothic = Dela_Gothic_One({
+  variable: "--font-dela",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -23,16 +37,62 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
+    <html lang="zh-tw">
+      <body className="">
         <div className={styles.wrapper}>
-          <nav className="h-16 nav-gradient"></nav>
-          <main className={styles.content}>{children} <p>Lorem iluptatum nihil aspernatur ratione maiores necessitatibus! A repudiandae, magni maxime, animi non dolorem nemo cupiditate laborum qui explicabo rem et cum suscipit. Dolorem cupiditate iusto autem corrupti harum repellendus reiciendis omnis nisi aperiam odit minus culpa numquam mollitia voluptatibus quo, officiis eum aspernatur reprehenderit porro atque obcaecati nesciunt ducimus officia? Velit tempore iure amet laborum inventore voluptas iste aspernatur aliquid repellendus possimus blanditiis libero id animi fugiat rerum, cum obcaecati repellat ex pariatur reiciendis quidem delectus? Sapiente, minima amet. Placeat, aliquam ullam at dicta pariatur est mollitia et hic? Sapiente temporibus sint officia odit voluptas hic totam id eligendi soluta eaque minima impedit, amet quo provident sequi ratione eius voluptatibus necessitatibus vel! Nam totam adipisci temporibus nemo veniam. Optio fugiat veniam architecto autem assumenda vitae nam consequuntur sed enim itaque, aut repellendus vero quis unde cumque animi tempore ipsa. Similique provident nostrum obcaecati, rerum aspernatur autem dolorum voluptatem ullam quae? Non itaque quidem quis aliquam quibusdam architecto autem, excepturi recusandae dolorem voluptatibus minus consequuntur officiis adipisci ipsam sunt doloribus quasi assumenda facere! Magni corrupti ipsa omnis expedita accusantium asperiores corporis? Cumque ipsa ut, beatae omnis ipsum iusto exercitationem tempora eos veritatis molestias doloremque corporis officiis reiciendis, suscipit est atque non numquam. Doloremque officia aut, ab placeat odit praesentium qui enim reprehenderit perferendis. Nulla assumenda ipsam aut ut temporibus porro corporis cupiditate? Consequuntur recusandae repellendus minus ad in fuga, reprehenderit inventore? Ducimus provident natus rerum officiis adipisci quo ipsum quas odio labore officia, libero voluptate architecto ex! Error quibusdam cum reprehenderit aliquid aut optio nam consectetur natus eos odio, accusamus vitae. Quam vero et suscipit aut, totam veritatis cupiditate ipsam eum iure recusandae ipsa. Labore quas unde et rem reiciendis suscipit exercitationem accusantium. Dolores excepturi, rerum est amet, cupiditate eaque aperiam dignissimos ullam id consequatur inventore eius commodi laboriosam sit ipsa numquam sint. Ullam distinctio et iusto nobis quos cum vitae ab, odit rem ipsa cumque in reprehenderit maiores. Nulla provident dolor vel, voluptates alias suscipit eum! Consectetur dolores maiores temporibus distinctio.</p></main>
-          <footer className="h-50 bg-donut-bg-2"></footer>
-
-
+          <nav className="h-16 nav-gradient flex justify-between items-center  p-4">
+            <object data="/DonutLogo.svg" className="mb-1" />
+            <Menu className="text-donut-prim" />
+            <div className="fixed h-8 w-100vw top-0"></div>
+          </nav>
+          <main className={styles.content}>
+            {children}{" "}
+            <p>
+              cupiditate eaque aperiam dignissimos ullam id consequatur
+              inventore eius commodi laboriosam sit ipsa numquam sint. Ullam
+              distinctio et iusto nobis quos cum vitae ab, odit rem ipsa cumque
+              in reprehenderit maiores. Nulla provident dolor vel, voluptates
+              alias suscipit eum! Consectetur dolores maiores temporibus
+              distinctio.upiditate eaque aperiam dignissimos ullam id
+              consequatur inventore eius commodi laboriosam sit ipsa numquam
+              sint. Ullam distinctio et iusto nobis quos cum vitae ab, odit rem
+              ipsa cumque in reprehenderit maiores. Nulla provident dolor vel,
+              voluptates alias suscipit eum! Consectetur dolores maiores
+              temporibus distinctio.upiditate eaque aperiam dignissimos ullam id
+              consequatur inventore eius commodi laboriosam sit ipsa numquam
+              sint. Ullam distinctio et iusto nobis quos cum vitae ab, odit rem
+              ipsa cumque in reprehenderit maiores. Nulla provident dolor vel,
+              voluptates alias suscipit eum! Consectetur dolores maiores
+              temporibus distinctio.upiditate eaque aperiam dignissimos ullam id
+              consequatur inventore eius commodi laboriosam sit ipsa numquam
+              sint. Ullam distinctio et iusto nobis quos cum vitae ab, odit rem
+              ipsa cumque in reprehenderit maiores. Nulla provident dolor vel,
+              voluptates alias suscipit eum! Consectetur dolores maiores
+              temporibus distinctio.upiditate eaque aperiam dignissimos ullam id
+              consequatur inventore eius commodi laboriosam sit ipsa numquam
+              sint. Ullam distinctio et iusto nobis quos cum vitae ab, odit rem
+              ipsa cumque in reprehenderit maiores. Nulla provident dolor vel,
+              voluptates alias suscipit eum! Consectetur dolores maiores
+              temporibus distinctio.
+            </p>
+          </main>
+          <footer className="bg-donut-bg-2 p-6">
+            <div className="flex justify-between">
+              <object data="/TimoutStudioLogo.svg" className="" />
+              <div className="flex justify-between items-center gap-2">
+                <Github className="h-4.5 w-4.5" />
+                <Instagram className="h-4.5 w-4.5" />
+              </div>
+            </div>
+            <p className="p-1 text-donut-p-tiny">
+              元智大學資訊傳播學系第 28 屆畢業展 － 互動組
+            </p>
+            <div className="flex">
+              <p className="mx-auto p-1 pt-3 text-donut-p-tiny text-donut-text-gray">
+                Copyright © 2025 Timeout Studio.
+              </p>
+            </div>
+          </footer>
         </div>
       </body>
     </html>

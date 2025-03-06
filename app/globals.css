@@ -13,6 +13,8 @@
   --color-donut-accent: #64baa5;
   --color-donut-text-white: #ffffff;
   --color-donut-text-gray: #67726e;
+
+  --text-donut-p-tiny: var(--text-xs);
 }
 @layer utilities {
   .nav-gradient {
@@ -20,12 +22,11 @@
     top: 0;
     backdrop-filter: blur(1rem);
     background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0));
-    mix-blend-mode: overlay;
   }
 }
 
 body {
-  background: var(--color-donut-sec);
+  background: var(--color-donut-bg);
   color: var(--color-donut-text-white);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: Inter, Noto Sans TC,Arial, Helvetica, sans-serif;
 }

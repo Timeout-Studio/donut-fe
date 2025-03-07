@@ -8,7 +8,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import styles from "./layout.module.css";
-import { Menu, Github, Instagram } from "lucide-react";
+import { Menu, Github, Instagram, X } from "lucide-react";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -43,7 +43,21 @@ export default function RootLayout({
           <nav className="h-16 nav-gradient flex justify-between items-center  p-4">
             <object data="/DonutLogo.svg" className="mb-1" />
             <Menu className="text-donut-prim" />
-            <div className="fixed h-8 w-100vw top-0"></div>
+            <div className="fixed h-screen w-full top-0 left-0 p-4 ">
+              <div className="bg-donut-bg w-full p-8 rounded-2xl donut-drop-shadow">
+                <div className="flex justify-between items-center">
+                  <object data="/TimoutStudioLogo.svg" className="" />
+                  <X />
+                </div>
+                <ul className="list-group mt-8 flex flex-col gap-6 items-end text-donut-h2 font-medium">
+                  <li className="list-group-item">主頁</li>
+                  <li className="list-group-item">排行榜</li>
+                  <li className="list-group-item">物種圖鑑</li>
+                  <li className="list-group-item">個人成績</li>
+                  <li className="list-group-item">關於我們</li>
+                </ul>
+              </div>
+            </div>
           </nav>
           <main className={styles.content}>
             {children}{" "}
@@ -76,7 +90,7 @@ export default function RootLayout({
               temporibus distinctio.
             </p>
           </main>
-          <footer className="bg-donut-bg-2 p-6">
+          <footer className="bg-donut-bg-2 p-6 text-donut-p-tiny ">
             <div className="flex justify-between">
               <object data="/TimoutStudioLogo.svg" className="" />
               <div className="flex justify-between items-center gap-2">
@@ -84,13 +98,26 @@ export default function RootLayout({
                 <Instagram className="h-4.5 w-4.5" />
               </div>
             </div>
-            <p className="p-1 text-donut-p-tiny">
-              元智大學資訊傳播學系第 28 屆畢業展 － 互動組
-            </p>
-            <div className="flex">
-              <p className="mx-auto p-1 pt-3 text-donut-p-tiny text-donut-text-gray">
-                Copyright © 2025 Timeout Studio.
-              </p>
+            <p className="p-1">元智大學資訊傳播學系第 28 屆畢業展 － 互動組</p>
+            <div className="">
+              <div>
+                <div className="block mt-4">
+                  <div className="m-1 flex gap-1 items-center">
+                    <p>主辦單位：</p>
+                    <object data="/YZUICLogo.svg"></object>
+                    <object data="/StrawberryPieLogo.svg"></object>
+                  </div>
+                  <div className="m-1 flex gap-1 items-center">
+                    <p>協辦單位：</p>
+                    <object data="/SongshanLogo.svg"></object>
+                    <object data="/TaoyuanLogo.svg"></object>
+                    <object data="/MOELogo.svg"></object>
+                  </div>
+                </div>
+                <p className="p-1 pt-3 text-donut-text-gray">
+                  Copyright © 2025 Timeout Studio. All rights reserved.
+                </p>
+              </div>
             </div>
           </footer>
         </div>

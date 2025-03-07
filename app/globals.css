@@ -14,6 +14,7 @@
   --color-donut-text-white: #ffffff;
   --color-donut-text-gray: #67726e;
 
+  --text-donut-h2: var(--text-2xl);
   --text-donut-p-tiny: var(--text-xs);
 }
 @layer utilities {
@@ -21,12 +22,15 @@
     position: sticky;
     top: 0;
     backdrop-filter: blur(1rem);
-    background-image: linear-gradient(rgba(0,0,0,0.5),rgba(0,0,0,0));
+    background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0));
+  }
+  .donut-drop-shadow {
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.5), 0 4px 16px rgba(0, 0, 0, 0.5);
   }
 }
 
 body {
-  background: var(--color-donut-bg);
+  background: var(--color-donut-text-gray);
   color: var(--color-donut-text-white);
-  font-family: Inter, Noto Sans TC,Arial, Helvetica, sans-serif;
+  font-family: Inter, Noto Sans TC, Arial, Helvetica, sans-serif;
 }

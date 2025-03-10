@@ -1,14 +1,9 @@
 import type { Metadata } from "next";
-import {
-  Geist,
-  Geist_Mono,
-  Inter,
-  Noto_Sans_TC,
-  Dela_Gothic_One,
-} from "next/font/google";
+import { Inter, Noto_Sans_TC } from "next/font/google";
 import "./globals.css";
 import styles from "./layout.module.css";
 import { Menu, Github, Instagram, X } from "lucide-react";
+import { YZUICLogo } from "./svg_components/Logos";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -18,12 +13,6 @@ const inter = Inter({
 const notoSansTC = Noto_Sans_TC({
   variable: "--font-noto-sans-tc",
   subsets: ["latin"],
-});
-
-const delaGothic = Dela_Gothic_One({
-  variable: "--font-dela",
-  subsets: ["latin"],
-  weight: "400",
 });
 
 export const metadata: Metadata = {
@@ -37,13 +26,13 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="zh-tw">
+    <html lang="zh-tw" className={`${inter.variable} ${notoSansTC.variable} `}>
       <body className="">
         <div className={styles.wrapper}>
           <nav className="h-16 nav-gradient flex justify-between items-center  p-4">
             <object data="/DonutLogo.svg" className="mb-1" />
             <Menu className="text-donut-prim" />
-            <div className="fixed h-screen w-full top-0 left-0 p-4 ">
+            <div className="fixed h-screen w-full top-0 left-0 p-4 hidden">
               <div className="bg-donut-bg w-full p-8 rounded-2xl donut-drop-shadow">
                 <div className="flex justify-between items-center">
                   <object data="/TimoutStudioLogo.svg" className="" />
@@ -104,7 +93,10 @@ export default function RootLayout({
                 <div className="block mt-4">
                   <div className="m-1 flex gap-1 items-center">
                     <p>主辦單位：</p>
-                    <object data="/YZUICLogo.svg"></object>
+                    <a href="https://infocom.yzu.edu.tw/">
+                      {/* <img src="/YZUICLogo.svg" alt="YZUIC Logo"></img> */}
+                      <YZUICLogo className="text-donut-text-white" />
+                    </a>
                     <object data="/StrawberryPieLogo.svg"></object>
                   </div>
                   <div className="m-1 flex gap-1 items-center">

@@ -12,7 +12,7 @@
   --color-donut-sec: #2b6757;
   --color-donut-accent: #64baa5;
   --color-donut-text-white: #ffffff;
-  --color-donut-text-gray: #67726e;
+  --color-donut-text-gray: #949E9B;
 
   --text-donut-h1: var(--text-4xl);
   --text-donut-h2: var(--text-2xl);
@@ -34,7 +34,7 @@
 }
 
 body {
-  background: var(--color-donut-text-gray);
+  background: var(--color-donut-bg);
   color: var(--color-donut-text-white);
   font-family: Inter, Noto Sans TC, Arial, Helvetica, sans-serif;
 }

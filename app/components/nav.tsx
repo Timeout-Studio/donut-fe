@@ -21,7 +21,7 @@ export default function Navbar() {
         <DonutLogo className="text-donut-prim mb-0.75 ml-0.5" />
       </a>
       {/* Menu Button */}
-      <button onClick={() => setIsOpen(true)}>
+      <button title="Menu" onClick={() => setIsOpen(true)}>
         <Menu className="text-donut-prim" />
       </button>
 
@@ -35,7 +35,7 @@ export default function Navbar() {
         <div className="bg-donut-bg w-full p-8 rounded-2xl donut-drop-shadow">
           <div className="flex justify-between items-center">
             <object data="/TimoutStudioLogo.svg" className="" />
-            <button onClick={() => setIsOpen(false)}>
+            <button title="home" onClick={() => setIsOpen(false)}>
               <X />
             </button>
           </div>

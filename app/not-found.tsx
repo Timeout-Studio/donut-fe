@@ -1,6 +1,3 @@
-// pages/404.tsx
-import Link from "next/link";
-
 export default function NotFound() {
   return (
     <div className="m-auto p-6">

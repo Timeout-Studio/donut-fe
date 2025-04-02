@@ -18,7 +18,7 @@ export default function Navbar() {
   return (
     <nav className="h-16 nav-gradient flex justify-between items-center p-4">
       <a href="">
-        <DonutLogo className="text-donut-prim mb-0.75" />
+        <DonutLogo className="text-donut-prim mb-0.75 ml-0.5" />
       </a>
       {/* Menu Button */}
       <button onClick={() => setIsOpen(true)}>
@@ -41,19 +41,19 @@ export default function Navbar() {
           </div>
           <ul className="list-group mt-8 flex flex-col gap-6 items-end text-donut-h2 font-medium">
             {/* 您的列表項目不變 */}
-            <li className="list-group-item">
+            <li className="list-group-item " onClick={() => setIsOpen(false)}>
               <Link href="./home">主頁</Link>
             </li>
-            <li className="list-group-item">
+            <li className="list-group-item" onClick={() => setIsOpen(false)}>
               <Link href="./rankings">排行榜</Link>
             </li>
-            <li className="list-group-item">
+            <li className="list-group-item" onClick={() => setIsOpen(false)}>
               <Link href="./species">物種圖鑑</Link>
             </li>
-            <li className="list-group-item">
+            <li className="list-group-item" onClick={() => setIsOpen(false)}>
               <Link href="./profile">個人成績</Link>
             </li>
-            <li className="list-group-item">
+            <li className="list-group-item" onClick={() => setIsOpen(false)}>
               <Link href="./about">關於我們</Link>
             </li>
           </ul>

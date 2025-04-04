@@ -17,16 +17,18 @@ export function ClickButton({ label }: ButtonClick) {
     <button
       onClick={handleClick}
       className={`
-        bg-emerald-300
+        bg-donut-bg-2
         font-semibold
         text-2xl
-        text-black
+        text-donut-text-white
         px-6 
         py-2
         rounded-full
         transition
         duration-200
-        ${clicked ? "bg-gray-800 text-white" : "hover:bg-gray-800 hover:text-white"}
+        hover:bg-donut-sec
+        hover:text-white
+        focus:bg-donut-prim
       `}
     >
       {label}

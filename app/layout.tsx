@@ -2,6 +2,9 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import styles from "./components/layout.module.css";
+import Button from "./components/button/Button";
+import ClickButton from "./components/button/buttonClick"
+
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
@@ -24,14 +27,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <div className={styles.wrapper}>
-          <nav className="p-8 bg-amber-50"></nav>
-          <main>{children} <p>Lorem iluptatum nihil aspernatur ratione maiores necessitatibus! A repudiandae, magni maxime, animi non dolorem nemo cupiditate laborum qui explicabo rem et cum suscipit. Dolorem cupiditate iusto autem corrupti harum repellendus reiciendis omnis nisi aperiam odit minus culpa numquam mollitia voluptatibus quo, officiis eum aspernatur reprehenderit porro atque obcaecati nesciunt ducimus officia? Velit tempore iure amet laborum inventore voluptas iste aspernatur aliquid repellendus possimus blanditiis libero id animi fugiat rerum, cum obcaecati repellat ex pariatur reiciendis quidem delectus? Sapiente, minima amet. Placeat, aliquam ullam at dicta pariatur est mollitia et hic? Sapiente temporibus sint officia odit voluptas hic totam id eligendi soluta eaque minima impedit, amet quo provident sequi ratione eius voluptatibus necessitatibus vel! Nam totam adipisci temporibus nemo veniam. Optio fugiat veniam architecto autem assumenda vitae nam consequuntur sed enim itaque, aut repellendus vero quis unde cumque animi tempore ipsa. Similique provident nostrum obcaecati, rerum aspernatur autem dolorum voluptatem ullam quae? Non itaque quidem quis aliquam quibusdam architecto autem, excepturi recusandae dolorem voluptatibus minus consequuntur officiis adipisci ipsam sunt doloribus quasi assumenda facere! Magni corrupti ipsa omnis expedita accusantium asperiores corporis? Cumque ipsa ut, beatae omnis ipsum iusto exercitationem tempora eos veritatis molestias doloremque corporis officiis reiciendis, suscipit est atque non numquam. Doloremque officia aut, ab placeat odit praesentium qui enim reprehenderit perferendis. Nulla assumenda ipsam aut ut temporibus porro corporis cupiditate? Consequuntur recusandae repellendus minus ad in fuga, reprehenderit inventore? Ducimus provident natus rerum officiis adipisci quo ipsum quas odio labore officia, libero voluptate architecto ex! Error quibusdam cum reprehenderit aliquid aut optio nam consectetur natus eos odio, accusamus vitae. Quam vero et suscipit aut, totam veritatis cupiditate ipsam eum iure recusandae ipsa. Labore quas unde et rem reiciendis suscipit exercitationem accusantium. Dolores excepturi, rerum est amet, cupiditate eaque aperiam dignissimos ullam id consequatur inventore eius commodi laboriosam sit ipsa numquam sint. Ullam distinctio et iusto nobis quos cum vitae ab, odit rem ipsa cumque in reprehenderit maiores. Nulla provident dolor vel, voluptates alias suscipit eum! Consectetur dolores maiores temporibus distinctio.</p></main>
-          <footer className="p-8 bg-amber-50"></footer>
-        </div>
+      <body className="antialiased">
+        <nav className="p-8 bg-gray-500">
+        <div className="flex space-x-4">
+            {/* 滑鼠移入時變色的按鈕 */}
+            <Button label="Hover 按鈕" />
+            {/* 點擊後變色的按鈕 */}
+            <ClickButton label="Click 按鈕" />
+          </div>
+        </nav>
+        <main>{children}</main>
+        <footer className="p-8 bg-amber-50">
+          <Button label="Footer 按鈕" />
+        </footer>
       </body>
     </html>
   );

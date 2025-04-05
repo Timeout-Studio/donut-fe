@@ -5,8 +5,7 @@ import styles from "./layout.module.css";
 import { Github, Instagram } from "lucide-react";
 import { YZUICLogo, StrawberryPieLogo } from "./svg_components/Logos";
 import Navbar from "./components/nav";
-import Button from "./components/button/Button";
-import ButtonClick from "./components/button/buttonClick";
+import Button from "./components/Button";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -45,50 +44,43 @@ export default function RootLayout({
           <Navbar />
           <main className={styles.content}>
             {children}{" "}
-            <div className="m-1 flex gap-4 items-center">
-              {/* 使用 hover 變色的按鈕 */}
-              <Button label="Hover 按鈕" />
-              {/* 使用點擊後變色的按鈕 */}
-              <ButtonClick label="Click 按鈕" />
-            </div>
           </main>
-          <footer className="bg-donut-bg-2 p-6 text-donut-p-tiny ">
+          <footer className="bg-donut-bg-2 p-6 ">
             <div className="flex justify-between">
-              <object data="/TimoutStudioLogo.svg" className="" />
+              <object data="/TimoutStudioLogo.svg" className="h-8 w-auto" />
               <div className="flex justify-between items-center gap-2">
                 <a href="./">
-                  <Github className="h-4.5 w-4.5" />
+                  <Github className="h-6 w-auto" />
                 </a>
                 <a href="https://www.instagram.com/donut_timeout/">
-                  <Instagram className="h-4.5 w-4.5" />
+                  <Instagram className="h-6 w-auto" />
                 </a>
               </div>
             </div>
-            <p className="p-1">元智大學資訊傳播學系第 28 屆畢業展 － 互動組</p>
-            <div className="">
-              <div>
-                <div className="block mt-4">
-                  <div className="m-1 flex gap-1 items-center">
-                    <p>主辦單位：</p>
-                    <a href="https://infocom.yzu.edu.tw/">
-                      <YZUICLogo className="text-donut-text-white" />
-                    </a>
-                    <a href="https://strawberrypie.tw/">
-                      <StrawberryPieLogo className="text-donut-text-white" />
-                    </a>
-                  </div>
-                  <div className="m-1 flex gap-1 items-center">
-                    <p>協辦單位：</p>
-                    <object data="/SongshanLogo.svg"></object>
-                    <object data="/TaoyuanLogo.svg"></object>
-                    <object data="/MOELogo.svg"></object>
-                  </div>
+            <p className="p-1 text-donut-p">元智大學資訊傳播學系第 28 屆畢業展 － 互動組</p>
+            <div>
+              <div className="mt-8 px-1 text-donut-p">
+                <div className="my-2 flex flex-nowrap gap-2 items-center">
+                  <p className="flex-shrink-0">主辦單位：</p>
+                  <a className="flex items-ㄈcenter flex-shrink-0" href="https://infocom.yzu.edu.tw/">
+                    <YZUICLogo className="text-donut-text-white h-8 w-auto" />
+                  </a>
+                  <a className="flex items-center flex-shrink-0" href="https://strawberrypie.tw/">
+                    <StrawberryPieLogo className="text-donut-text-white h-8 w-auto" />
+                  </a>
                 </div>
-                <p className="p-1 pt-3 text-donut-text-gray">
-                  Copyright © 2025 Timeout Studio. All rights reserved.
-                </p>
+                <div className="my-2 flex flex-nowrap gap-2 items-center">
+                  <p className="flex-shrink-0">協辦單位：</p>
+                  <object data="/SongshanLogo.svg" className="h-8 w-auto"></object>
+                  <object data="/TaoyuanLogo.svg" className="h-8 w-auto"></object>
+                  <object data="/MOELogo.svg" className="h-8 w-auto"></object>
+                </div>
               </div>
+
             </div>
+            <p className="p-1 pt-3 text-donut-text-gray text-donut-p-tiny text-center">
+              Copyright © 2025 Timeout Studio. All rights reserved.
+            </p>
           </footer>
         </div>
       </body>

@@ -16,7 +16,7 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="h-16 nav-gradient flex justify-between items-center p-4">
+    <nav className="h-16 nav-gradient flex justify-between items-center p-4 z-50">
       <a href="">
         <DonutLogo className="text-donut-prim mb-0.75 ml-0.5" />
       </a>
@@ -57,7 +57,7 @@ export default function Navbar() {
               </Link>
             </li>
             <li className="list-group-item">
-              <Link href="./profile" onClick={() => setIsOpen(false)}>
+              <Link href="./result" onClick={() => setIsOpen(false)}>
                 個人成績
               </Link>
             </li>

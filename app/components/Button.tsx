@@ -1,6 +1,5 @@
 "use client";
 
-import { Link } from "lucide-react";
 import React, { useState } from "react";
 
 interface Button {
@@ -9,7 +8,7 @@ interface Button {
   onClick: () => void;
 }
 
-export function Button({ label, href }: Button) {
+export function Button({ label }: Button) {
   const [clicked, setClicked] = useState(false);
 
   const handleClick = () => {

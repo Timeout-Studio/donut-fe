@@ -1,5 +1,3 @@
-import Image from 'next/image'
-
 interface BirdItemProps {
   isLocked: boolean;
   children: React.ReactNode;

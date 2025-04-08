@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, use } from "react";
-import { useParams } from "next/navigation";
 import Image from "next/image";
 import BirdItem from "@/app/components/BirdItem";
 
@@ -145,7 +144,7 @@ const fetchRanking = async (id: string) => {
 		if (!response.ok) {
 			throw new Error("Failed to fetch ranking");
 		}
-		let result = await response.json();
+		const result = await response.json();
 
 		return result?.rank;
 	} catch (error) {

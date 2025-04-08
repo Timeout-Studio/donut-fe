@@ -5,7 +5,6 @@ import styles from "./layout.module.css";
 import { Github, Instagram } from "lucide-react";
 import { YZUICLogo, StrawberryPieLogo } from "./svg_components/Logos";
 import Navbar from "./components/nav";
-import Button from "./components/Button";
 
 const inter = Inter({
   variable: "--font-inter",

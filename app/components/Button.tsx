@@ -1,16 +1,20 @@
 "use client";
 
+import { Link } from "lucide-react";
 import React, { useState } from "react";
 
-interface ButtonClick {
+interface Button {
   label: string;
+  href: string;
+  onClick: () => void;
 }
 
-export function ClickButton({ label }: ButtonClick) {
+export function Button({ label, href }: Button) {
   const [clicked, setClicked] = useState(false);
 
   const handleClick = () => {
     setClicked((prev) => !prev);
+    console.log(clicked);
   };
 
   return (
@@ -28,7 +32,7 @@ export function ClickButton({ label }: ButtonClick) {
         duration-200
         hover:bg-donut-sec
         hover:text-white
-        focus:bg-donut-prim
+        active:bg-donut-prim
       `}
     >
       {label}
@@ -36,4 +40,4 @@ export function ClickButton({ label }: ButtonClick) {
   );
 }
 
-export default ClickButton;
+export default Button;

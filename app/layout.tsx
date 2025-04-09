@@ -48,9 +48,9 @@ export default function RootLayout({
             <div className="flex justify-between">
               <object data="/TimoutStudioLogo.svg" className="h-8 w-auto" />
               <div className="flex justify-between items-center gap-2">
-                <a href="./">
+                {/* <a href="./">
                   <Github className="h-6 w-auto" />
-                </a>
+                </a> */}
                 <a href="https://www.instagram.com/donut_timeout/">
                   <Instagram className="h-6 w-auto" />
                 </a>

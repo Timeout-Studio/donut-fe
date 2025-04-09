@@ -17,7 +17,7 @@ export default function Navbar() {
 
   return (
     <nav className="h-16 nav-gradient flex justify-between items-center p-4 z-50">
-      <a href="">
+      <a href="/home">
         <DonutLogo className="text-donut-prim mb-0.75 ml-0.5" />
       </a>
       {/* Menu Button */}
@@ -40,9 +40,8 @@ export default function Navbar() {
             </button>
           </div>
           <ul className="list-group mt-8 flex flex-col gap-6 items-end text-donut-h2 font-medium">
-            {/* 您的列表項目不變 */}
-            <li className="list-group-item ">
-              <Link href="./home" onClick={() => setIsOpen(false)}>
+            {/* <li className="list-group-item ">
+              <Link href="/home" onClick={() => setIsOpen(false)}>
                 主頁
               </Link>
             </li>
@@ -55,17 +54,17 @@ export default function Navbar() {
               <Link href="./species" onClick={() => setIsOpen(false)}>
                 物種圖鑑
               </Link>
-            </li>
+            </li> */}
             <li className="list-group-item">
-              <Link href="./result" onClick={() => setIsOpen(false)}>
+              <Link href="/result" onClick={() => setIsOpen(false)}>
                 個人成績
               </Link>
             </li>
-            <li className="list-group-item">
+            {/* <li className="list-group-item">
               <Link href="./about" onClick={() => setIsOpen(false)}>
                 關於我們
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div

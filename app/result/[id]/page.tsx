@@ -233,7 +233,7 @@ const IndividualResultPage = ({ params }: PageProps) => {
 						alt={userMainOrganism?.name || userData?.username || "User avatar"}
 						width={128}
 						height={128}
-						className="object-cover"
+						className="object-contain w-full h-full"
 					/>
 				</div>
 
@@ -251,7 +251,7 @@ const IndividualResultPage = ({ params }: PageProps) => {
 							<div className="text-5xl flex items-baseline gap-1 relative">
 								<div className="font-bold">{Math.floor((userData?.result[0]?.duration || 0) / 60)}</div>
 								<div className="me-1 text-sm text-gray-400">分</div>
-								<div className="font-bold">{String((userData?.result[0]?.duration || 0) % 60).padStart(2, "0")}</div>
+								<div className="font-bold">{String(Math.round(userData?.result[0]?.duration || 0) % 60).padStart(2, "0")}</div>
 								<div className="right-4 text-sm text-gray-400">秒</div>
 							</div>
 						</div>

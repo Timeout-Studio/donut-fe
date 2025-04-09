@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Inter, Noto_Sans_TC } from "next/font/google";
 import "./globals.css";
 import styles from "./layout.module.css";
-import { /*Github*/, Instagram } from "lucide-react";
+import { /*Github, */ Instagram } from "lucide-react";
 import { YZUICLogo, StrawberryPieLogo } from "./svg_components/Logos";
 import Navbar from "./components/nav";
 

@@ -44,7 +44,7 @@ export default function RootLayout({
           <main className={styles.content}>
             {children}{" "}
           </main>
-          <footer className="bg-donut-bg-2 p-6 ">
+          <footer className="bg-donut-bg-2 p-6 relative z-20">
             <div className="flex justify-between">
               <object data="/TimoutStudioLogo.svg" className="h-8 w-auto" />
               <div className="flex justify-between items-center gap-2">

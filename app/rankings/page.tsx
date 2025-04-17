@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import rankingService from '../api/services/rankingService';
 
 // 定義排名數據接口
 interface RankingItem {
@@ -13,18 +14,20 @@ interface RankingItem {
   avatarUrl: string;
 }
 
-// 模擬排名數據
-const mockRankings: RankingItem[] = [
-  { id: 1, rank: 1, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-  { id: 2, rank: 2, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-  { id: 3, rank: 3, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-  { id: 4, rank: 4, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-  { id: 5, rank: 5, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-  { id: 6, rank: 6, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-  { id: 7, rank: 7, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-  { id: 8, rank: 8, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-  { id: 9, rank: 9, username: '林駿宇', date: '2025/04/12', time: '05:31', avatarUrl: '/placeholder-avatar.png' },
-];
+// API響應類型
+interface ApiResponse {
+  _data?: any[];
+  data?: any[];
+  results?: any[];
+  [key: string]: any;
+}
+
+// 載入狀態組件
+const LoadingSpinner = () => (
+  <div className="flex justify-center items-center py-10">
+    <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-donut-accent"></div>
+  </div>
+);
 
 // 前三名項目組件
 const TopThreeItem = ({ ranking }: { ranking: RankingItem }) => {
@@ -52,7 +55,7 @@ const TopThreeItem = ({ ranking }: { ranking: RankingItem }) => {
           : 'w-[88px] h-[88px]'
         } rounded-full bg-donut-accent overflow-hidden`}>
         <Image 
-          src={ranking.avatarUrl} 
+          src={ranking.avatarUrl || '/home/profile.jpg'} 
           alt={ranking.username} 
           width={isFirst ? 105 : 80} 
           height={isFirst ? 105 : 80} 
@@ -84,7 +87,7 @@ const RankingListItem = ({ ranking }: { ranking: RankingItem }) => {
         
         <div className={`w-[50px] h-[50px] rounded-full z-10 overflow-hidden ${isSpecial ? 'bg-[#4B4B50]' : 'bg-donut-accent'} flex justify-center items-center`}>
           <Image 
-            src={ranking.avatarUrl} 
+            src={ranking.avatarUrl || '/home/profile.jpg'} 
             alt={ranking.username} 
             width={44} 
             height={44} 
@@ -103,24 +106,146 @@ const RankingListItem = ({ ranking }: { ranking: RankingItem }) => {
   );
 };
 
-export default function Rankings() {
-  const [rankings, setRankings] = useState<RankingItem[]>(mockRankings);
+// 將秒轉換為分:秒格式
+function formatDuration(seconds: number): string {
+  const minutes = Math.floor(seconds / 60);
+  const remainingSeconds = Number((seconds % 60).toFixed(1)); // 取小數點後一位
   
-  // 在真實環境中，可以在這裡從API獲取排名數據
+  // 格式化為 MM:SS，確保秒數總是兩位數
+  return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;
+}
+
+// 從時間戳獲取日期字符串
+function formatDate(timestamp: number): string {
+  const date = new Date(timestamp * 1000);
+  return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
+}
+
+export default function Rankings() {
+  const [rankings, setRankings] = useState<RankingItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  
+  // 從API獲取排名數據
   useEffect(() => {
-    // 模擬從API獲取數據
-    // const fetchRankings = async () => {
-    //   try {
-    //     const response = await fetch('/api/rankings');
-    //     const data = await response.json();
-    //     setRankings(data);
-    //   } catch (error) {
-    //     console.error('Error fetching rankings:', error);
-    //   }
-    // };
+    const fetchRankings = async () => {
+      try {
+        setLoading(true);
+        // 調用API獲取所有排行榜數據
+        const response = await rankingService.getAllRankings();
+        
+        console.log('API Response:', response); // 調試輸出
+        
+        // 檢查API響應格式並處理數據
+        let rankingsData: any[] = [];
+        if (response && typeof response === 'object') {
+          const apiResponse = response as ApiResponse;
+          
+          // 首先檢查 _data 屬性 (根據截圖這是API返回的主要數據結構)
+          if (apiResponse._data && Array.isArray(apiResponse._data)) {
+            rankingsData = apiResponse._data;
+          } 
+          // 備用選項
+          else if (apiResponse.data && Array.isArray(apiResponse.data)) {
+            rankingsData = apiResponse.data;
+          }
+          else if (apiResponse.results && Array.isArray(apiResponse.results)) {
+            rankingsData = apiResponse.results;
+          }
+          else if (Array.isArray(response)) {
+            rankingsData = response;
+          }
+          else if (Object.keys(response).length > 0) {
+            rankingsData = [response];
+          }
+        }
+        
+        // 將API返回的數據映射到我們需要的數據格式
+        const formattedRankings: RankingItem[] = rankingsData.map((item: any, index: number) => {
+          // 處理 player_id 作為用戶名，實際環境中這裡可能需要從別的地方獲取真實用戶名
+          const username = item.player_id ? `玩家 ${item.player_id}` : `未知玩家 ${index + 1}`;
+          
+          // 處理日期，從created_at轉換
+          const date = item.created_at ? formatDate(item.created_at) : '未知日期';
+          
+          // 處理時間，從duration轉換為分:秒格式
+          const time = item.duration ? formatDuration(item.duration) : '00:00';
+          
+          // 根據ID或索引生成排名
+          const rank = index + 1; // 或者可以根據其他邏輯確定排名
+          
+          return {
+            id: item.id ? Number(item.id) : index + 1,
+            rank,
+            username,
+            date,
+            time,
+            avatarUrl: '/home/profile.jpg' // 使用默認頭像
+          };
+        });
+        
+        // 按duration排序
+        const sortedRankings = formattedRankings.sort((a, b) => {
+          // 解析時間 (格式為 MM:SS)
+          const timeA = a.time.split(':').map(Number);
+          const timeB = b.time.split(':').map(Number);
+          
+          // 轉換為秒數進行比較
+          const secondsA = timeA[0] * 60 + timeA[1];
+          const secondsB = timeB[0] * 60 + timeB[1];
+          
+          // 較短時間排在前面
+          return secondsA - secondsB;
+        });
+        
+        // 更新排名順序
+        sortedRankings.forEach((item, index) => {
+          item.rank = index + 1;
+        });
+        
+        setRankings(sortedRankings);
+        setError(null);
+      } catch (err) {
+        console.error('Error fetching rankings:', err);
+        setError('無法獲取排行榜數據，請稍後再試');
+      } finally {
+        setLoading(false);
+      }
+    };
     
-    // fetchRankings();
+    fetchRankings();
   }, []);
+  
+  // 如果正在加載，顯示加載動畫
+  if (loading) {
+    return (
+      <div className="flex flex-col items-center justify-center px-4 py-10 bg-[#1D1D1F] min-h-screen">
+        <LoadingSpinner />
+      </div>
+    );
+  }
+  
+  // 如果有錯誤，顯示錯誤信息
+  if (error) {
+    return (
+      <div className="flex flex-col items-center justify-center px-4 py-10 bg-[#1D1D1F] min-h-screen">
+        <div className="p-4 bg-red-100 text-red-700 rounded-lg">
+          {error}
+        </div>
+      </div>
+    );
+  }
+  
+  // 如果沒有數據，顯示提示信息
+  if (rankings.length === 0) {
+    return (
+      <div className="flex flex-col items-center justify-center px-4 py-10 bg-[#1D1D1F] min-h-screen">
+        <div className="p-4 text-white">
+          暫無排行榜數據
+        </div>
+      </div>
+    );
+  }
   
   // 按照設計順序重排前三名: 二、一、三
   const getTopThreeOrdered = () => {
@@ -130,7 +255,7 @@ export default function Rankings() {
     const third = rankings.find(r => r.rank === 3);
     
     // 按照設計需求的順序返回: 二、一、三
-    return [second, first, third].filter(Boolean);
+    return [second, first, third].filter(Boolean) as RankingItem[];
   };
   
   const topThree = getTopThreeOrdered();
@@ -142,7 +267,7 @@ export default function Rankings() {
       <div className="flex flex-row justify-center items-end w-full mb-8 sm:mb-12 gap-0">
         {topThree.map((ranking, index) => (
           <div 
-            key={ranking?.id} 
+            key={ranking.id} 
             className={`
               ${index === 1 
                 ? 'z-10 order-2' 
@@ -152,7 +277,7 @@ export default function Rankings() {
               }
             `}
           >
-            <TopThreeItem ranking={ranking!} />
+            <TopThreeItem ranking={ranking} />
           </div>
         ))}
       </div>

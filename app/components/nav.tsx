@@ -16,10 +16,10 @@ export default function Navbar() {
   }, []);
 
   return (
-    <nav className="h-16 nav-gradient flex justify-between items-center p-4 z-50">
-      <a href="/home">
+    <nav className="h-16 nav-gradient fixed w-full flex justify-between items-center p-4 z-50">
+      <Link href="/home">
         <DonutLogo className="text-donut-prim mb-0.75 ml-0.5" />
-      </a>
+      </Link>
       {/* Menu Button */}
       <button title="Menu" onClick={() => setIsOpen(true)}>
         <Menu className="text-donut-prim" />
@@ -31,40 +31,39 @@ export default function Navbar() {
           ${mounted ? "transition-transform duration-500" : ""}
           -translate-y-full ${isOpen ? "translate-y-0" : ""}`}
       >
-        {/* 您的選單內容不變 */}
         <div className="bg-donut-bg w-full p-8 rounded-2xl donut-drop-shadow">
           <div className="flex justify-between items-center">
             <object data="/TimoutStudioLogo.svg" className="" />
-            <button title="home" onClick={() => setIsOpen(false)}>
+            <button title="Close" onClick={() => setIsOpen(false)}>
               <X />
             </button>
           </div>
           <ul className="list-group mt-8 flex flex-col gap-6 items-end text-donut-h2 font-medium">
-            {/* <li className="list-group-item ">
+            <li className="list-group-item">
               <Link href="/home" onClick={() => setIsOpen(false)}>
-                主頁
+                首頁
               </Link>
             </li>
             <li className="list-group-item">
-              <Link href="./rankings" onClick={() => setIsOpen(false)}>
+              <Link href="/rankings" onClick={() => setIsOpen(false)}>
                 排行榜
               </Link>
             </li>
             <li className="list-group-item">
-              <Link href="./species" onClick={() => setIsOpen(false)}>
+              <Link href="/species" onClick={() => setIsOpen(false)}>
                 物種圖鑑
               </Link>
-            </li> */}
+            </li>
             <li className="list-group-item">
               <Link href="/result" onClick={() => setIsOpen(false)}>
                 個人成績
               </Link>
             </li>
-            {/* <li className="list-group-item">
-              <Link href="./about" onClick={() => setIsOpen(false)}>
+            <li className="list-group-item">
+              <Link href="/about" onClick={() => setIsOpen(false)}>
                 關於我們
               </Link>
-            </li> */}
+            </li>
           </ul>
         </div>
         <div

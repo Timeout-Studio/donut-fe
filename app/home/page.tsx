@@ -1,7 +1,6 @@
 'use client';
 
 import Image from 'next/image';
-import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { ReadMoreButton } from '../components/ReadMoreButton';
 
@@ -140,7 +139,7 @@ export default function Home() {
               </div>
             </div>
             
-            <ReadMoreButton href="/ranking" />
+            <ReadMoreButton href="/rankings" />
           </section>
 
           {/* 關於我們區塊 */}

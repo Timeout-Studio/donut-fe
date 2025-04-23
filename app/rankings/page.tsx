@@ -16,10 +16,10 @@ interface RankingItem {
 
 // API響應類型
 interface ApiResponse {
-  _data?: any[];
-  data?: any[];
-  results?: any[];
-  [key: string]: any;
+  _data?: Record<string, unknown>[];
+  data?: Record<string, unknown>[];
+  results?: Record<string, unknown>[];
+  [key: string]: unknown;
 }
 
 // 載入狀態組件
@@ -137,39 +137,47 @@ export default function Rankings() {
         console.log('API Response:', response); // 調試輸出
         
         // 檢查API響應格式並處理數據
-        let rankingsData: any[] = [];
+        let rankingsData: Record<string, unknown>[] = [];
         if (response && typeof response === 'object') {
-          const apiResponse = response as ApiResponse;
-          
-          // 首先檢查 _data 屬性 (根據截圖這是API返回的主要數據結構)
-          if (apiResponse._data && Array.isArray(apiResponse._data)) {
-            rankingsData = apiResponse._data;
-          } 
-          // 備用選項
-          else if (apiResponse.data && Array.isArray(apiResponse.data)) {
-            rankingsData = apiResponse.data;
-          }
-          else if (apiResponse.results && Array.isArray(apiResponse.results)) {
-            rankingsData = apiResponse.results;
-          }
-          else if (Array.isArray(response)) {
+          // 如果是數組，直接使用
+          if (Array.isArray(response)) {
+            // @ts-expect-error - rankingService 返回的類型與我們預期的類型兼容
             rankingsData = response;
           }
-          else if (Object.keys(response).length > 0) {
-            rankingsData = [response];
+          // 如果是對象，查找數據數組
+          else {
+            const apiResponse = response as unknown as ApiResponse;
+            
+            // 首先檢查 _data 屬性 (根據截圖這是API返回的主要數據結構)
+            if (apiResponse._data && Array.isArray(apiResponse._data)) {
+              rankingsData = apiResponse._data;
+            } 
+            // 備用選項
+            else if (apiResponse.data && Array.isArray(apiResponse.data)) {
+              rankingsData = apiResponse.data;
+            }
+            else if (apiResponse.results && Array.isArray(apiResponse.results)) {
+              rankingsData = apiResponse.results;
+            }
+            else if (Object.keys(response).length > 0) {
+              rankingsData = [response as Record<string, unknown>];
+            }
           }
         }
         
         // 將API返回的數據映射到我們需要的數據格式
-        const formattedRankings: RankingItem[] = rankingsData.map((item: any, index: number) => {
+        const formattedRankings: RankingItem[] = rankingsData.map((item: Record<string, unknown>, index: number) => {
           // 處理 player_id 作為用戶名，實際環境中這裡可能需要從別的地方獲取真實用戶名
-          const username = item.player_id ? `玩家 ${item.player_id}` : `未知玩家 ${index + 1}`;
+          const playerId = item.player_id as string | number | undefined;
+          const username = playerId ? `玩家 ${playerId}` : `未知玩家 ${index + 1}`;
           
           // 處理日期，從created_at轉換
-          const date = item.created_at ? formatDate(item.created_at) : '未知日期';
+          const createdAt = item.created_at as number | undefined;
+          const date = createdAt ? formatDate(createdAt) : '未知日期';
           
           // 處理時間，從duration轉換為分:秒格式
-          const time = item.duration ? formatDuration(item.duration) : '00:00';
+          const duration = item.duration as number | undefined;
+          const time = duration ? formatDuration(duration) : '00:00';
           
           // 根據ID或索引生成排名
           const rank = index + 1; // 或者可以根據其他邏輯確定排名

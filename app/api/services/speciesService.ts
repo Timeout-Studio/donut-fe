@@ -2,10 +2,10 @@ import apiClient from '../apiClient';
 
 // API響應格式定義
 interface ApiResponse {
-  _data?: any[];
-  data?: any[];
-  results?: any[];
-  [key: string]: any;
+  _data?: Record<string, unknown>[];
+  data?: Record<string, unknown>[];
+  results?: Record<string, unknown>[];
+  [key: string]: unknown;
 }
 
 // 搜索請求參數介面
@@ -13,11 +13,13 @@ interface SearchParams {
   page?: number;
   pageSize?: number;
   sort?: string;
-  keyword?: string;
+  keyword?: string | null;
   organismTypes?: string[];
   speciesTypes?: string[];
-  statusValues?: string[];
-  [key: string]: any;
+  statusValues?: string[] | null;
+  fields?: string[] | null;
+  expand?: string[] | null;
+  [key: string]: string | number | boolean | null | string[] | undefined;
 }
 
 // 物種資料介面
@@ -62,7 +64,7 @@ class SpeciesService {
   };
 
   // 根據API響應獲取數據數組
-  private getDataFromResponse(response: ApiResponse): any[] {
+  private getDataFromResponse(response: ApiResponse): Record<string, unknown>[] {
     if (response._data && Array.isArray(response._data)) {
       return response._data;
     } 
@@ -96,7 +98,7 @@ class SpeciesService {
     try {
       const response = await apiClient.post<ApiResponse>('/organism/search', this.defaultSearchParams);
       const speciesData = this.getDataFromResponse(response);
-      return speciesData.map(this.processSpeciesData);
+      return speciesData.map((item) => this.processSpeciesData(item as unknown as Species));
     } catch (error) {
       console.error('Error fetching all species:', error);
       return [];
@@ -126,7 +128,7 @@ class SpeciesService {
       
       const response = await apiClient.post<ApiResponse>('/organism/search', searchParams);
       const speciesData = this.getDataFromResponse(response);
-      return speciesData.map(this.processSpeciesData);
+      return speciesData.map((item) => this.processSpeciesData(item as unknown as Species));
     } catch (error) {
       console.error(`Error fetching species by category ${category}:`, error);
       return [];

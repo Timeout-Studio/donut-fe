@@ -1,8 +1,8 @@
 'use client';
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 import Image from 'next/image';
-import speciesService, { Species as ApiSpecies, SPECIES_CATEGORIES } from '../api/services/speciesService';
+import speciesService, { Species as ApiSpecies } from '../api/services/speciesService';
 import SpeciesDetailModal, { SpeciesViewModel } from './SpeciesDetailModal';
 
 // 定義物種類別

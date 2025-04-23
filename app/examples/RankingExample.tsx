@@ -1,6 +1,5 @@
 'use client';
 
-import { useEffect } from 'react';
 import rankingService, { RankingItem } from '../api/services/rankingService';
 import { useApi } from '../api/hooks/useApi';
 import Image from 'next/image';

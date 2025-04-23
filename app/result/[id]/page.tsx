@@ -71,7 +71,7 @@ const IndividualResultPage = ({ params }: PageProps) => {
 				}
 			});
 		};
-	}, [id]);
+	}, [id, speciesImages]);
 
 	// 保存結果 ID 到本地儲存
 	useEffect(() => {

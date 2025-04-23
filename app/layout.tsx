@@ -2,9 +2,8 @@ import type { Metadata } from "next";
 import { Inter, Noto_Sans_TC } from "next/font/google";
 import "./globals.css";
 import styles from "./layout.module.css";
-import { /*Github, */ Instagram } from "lucide-react";
-import { YZUICLogo, StrawberryPieLogo } from "./svg_components/Logos";
 import Navbar from "./components/nav";
+import Footer from "./components/Footer";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -44,59 +43,7 @@ export default function RootLayout({
           <main className={styles.content}>
             {children}{" "}
           </main>
-          <footer className="bg-donut-bg-2 px-4 py-8 sm:px-6 sm:py-10 relative z-20">
-            <div className="container mx-auto">
-              {/* 在電腦版使用三欄佈局，手機版垂直居中 */}
-              <div className="flex flex-col items-center lg:flex-row lg:items-start lg:justify-between gap-10 mb-10">
-                {/* 左側區塊 - logo和畢業展信息 */}
-                <div className="flex flex-col items-center lg:items-start text-center lg:text-left lg:w-1/3">
-                  <object data="/TimoutStudioLogo.svg" className="h-10 sm:h-12 w-auto mb-4" />
-                  <p className="text-donut-p text-base sm:text-lg font-medium">元智大學資訊傳播學系第 28 屆畢業展 － 互動組</p>
-                </div>
-                
-                {/* 中間區塊 - 主辦與協辦單位 */}
-                <div className="flex flex-col items-center lg:items-start text-center lg:text-left lg:w-1/3">
-                  {/* 主辦單位 */}
-                  <div className="mb-8">
-                    <h3 className="text-donut-p text-lg sm:text-xl font-bold mb-4">主辦單位</h3>
-                    <div className="flex flex-wrap justify-center lg:justify-start gap-6 items-center">
-                      <a className="flex items-center" href="https://infocom.yzu.edu.tw/">
-                        <YZUICLogo className="text-donut-text-white h-10 sm:h-12 w-auto" />
-                      </a>
-                      <a className="flex items-center" href="https://strawberrypie.tw/">
-                        <StrawberryPieLogo className="text-donut-text-white h-10 sm:h-12 w-auto" />
-                      </a>
-                    </div>
-                  </div>
-                  
-                  {/* 協辦單位 */}
-                  <div>
-                    <h3 className="text-donut-p text-lg sm:text-xl font-bold mb-4">協辦單位</h3>
-                    <div className="flex flex-wrap justify-center lg:justify-start gap-6 items-center">
-                      <object data="/SongshanLogo.svg" className="h-9 sm:h-11 w-auto"></object>
-                      <object data="/TaoyuanLogo.svg" className="h-9 sm:h-11 w-auto"></object>
-                      <object data="/MOELogo.svg" className="h-9 sm:h-11 w-auto"></object>
-                    </div>
-                  </div>
-                </div>
-                
-                {/* 右側區塊 - 社交媒體 */}
-                <div className="flex flex-col items-center lg:items-end lg:w-1/3">
-                  <h3 className="text-donut-p text-lg sm:text-xl font-bold mb-4">關注我們</h3>
-                  <div className="flex items-center gap-4">
-                    <a href="https://www.instagram.com/donut_timeout/" className="hover:opacity-80 transition-opacity" aria-label="Instagram">
-                      <Instagram className="h-8 w-8 p-1 text-white" />
-                    </a>
-                  </div>
-                </div>
-              </div>
-              
-              {/* 版權信息 - 跨越整個寬度 */}
-              <p className="pt-6 text-donut-text-gray text-sm text-center border-t border-gray-700/40">
-                Copyright © 2025 Timeout Studio. All rights reserved.
-              </p>
-            </div>
-          </footer>
+          <Footer />
         </div>
       </body>
     </html>

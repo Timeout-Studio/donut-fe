@@ -1,4 +1,3 @@
-import { Instagram } from "lucide-react";
 import { YZUICLogo, StrawberryPieLogo } from "../svg_components/Logos";
 
 export default function Footer() {

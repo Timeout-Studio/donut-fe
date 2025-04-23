@@ -15,7 +15,7 @@ interface SearchParams {
   page?: number;
   pageSize?: number;
   sort?: string;
-  [key: string]: any;
+  [key: string]: string | number | boolean | null | undefined;
 }
 
 // 排行榜API服務

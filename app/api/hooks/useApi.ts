@@ -19,7 +19,7 @@ interface ApiState<T> {
 export function useApi<T>(
   fetchFunction: () => Promise<T>,
   initialFetch = true,
-  deps: any[] = []
+  deps: unknown[] = []
 ): ApiState<T> {
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(initialFetch);

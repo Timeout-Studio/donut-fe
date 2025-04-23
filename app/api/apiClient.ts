@@ -10,11 +10,14 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_BASE_API_URL;
 // HTTP請求方法類型
 type HttpMethod = 'GET' | 'POST';
 
+// 定義通用的請求體類型
+type RequestBodyType = Record<string, unknown>;
+
 // API請求選項介面
 interface ApiRequestOptions {
   method: HttpMethod;
   headers?: HeadersInit;
-  body?: any;
+  body?: RequestBodyType;
   credentials?: RequestCredentials;
 }
 
@@ -72,7 +75,7 @@ class ApiClient {
   }
 
   // POST方法封裝
-  async post<T>(endpoint: string, body: any, headers?: HeadersInit): Promise<T> {
+  async post<T>(endpoint: string, body: RequestBodyType, headers?: HeadersInit): Promise<T> {
     return this.fetchApi<T>(endpoint, { method: 'POST', body, headers });
   }
 }

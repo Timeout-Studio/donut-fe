@@ -1,5 +1,5 @@
 import apiClient from '../apiClient';
-import speciesService, { Species } from './speciesService';
+import { Species } from './speciesService';
 
 // 定義用戶資料的介面
 export interface UserData {
@@ -51,7 +51,7 @@ class ResultService {
 
 		// 找出最短的 duration 結果並累積所有 other_organism_id
 		let shortestResult = userData.result[0];
-		let allOtherOrganisms = new Set<string>();
+		const allOtherOrganisms = new Set<string>();
 
 		userData.result.forEach((result) => {
 			// 更新最短時間結果

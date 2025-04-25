@@ -35,6 +35,7 @@ class ResultService {
 	async getUserData(id: string): Promise<UserData | null> {
 		try {
 			const response = await apiClient.get<UserData>(`/player/${id}?expand=result`);
+			console.log(response)
 			return response;
 		} catch (error) {
 			console.error("Error fetching user data:", error);

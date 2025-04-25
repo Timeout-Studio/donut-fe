@@ -17,7 +17,7 @@ const ResultPage = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl">請輸入你的 ID</h1>
+      <h1 className="text-2xl">感應一下你的小卡以查看結果</h1>
     </div>
   )
 }

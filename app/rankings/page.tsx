@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
 import rankingService from '../api/services/rankingService';
+import resultService from '../api/services/resultService';
 
 // 定義排名數據接口
 interface RankingItem {
@@ -72,9 +73,9 @@ const TopThreeItem = ({ ranking }: { ranking: RankingItem }) => {
 };
 
 // 排名列表項目組件
-const RankingListItem = ({ ranking }: { ranking: RankingItem }) => {
-  // 第5名使用淺綠色背景，其他使用深灰色
-  const isSpecial = ranking.rank === 5;
+const RankingListItem = ({ ranking, currentUserId }: { ranking: RankingItem; currentUserId: string | null }) => {
+  // 判斷是否是當前用戶的排名
+  const isCurrentUser = currentUserId && ranking.id.toString() === currentUserId;
   
   return (
     <div className="relative w-full flex items-center">
@@ -83,9 +84,9 @@ const RankingListItem = ({ ranking }: { ranking: RankingItem }) => {
       
       {/* pill背景 */}
       <div className="relative flex-1 flex items-center gap-5 ps-3 py-3 px-5">
-        <div className={`absolute inset-0 rounded-full ${isSpecial ? 'bg-[#A6E8D9]' : 'bg-[#4B4B50]'}`} />
+        <div className={`absolute inset-0 rounded-full ${isCurrentUser ? 'bg-[#A6E8D9]' : 'bg-[#4B4B50]'}`} />
         
-        <div className={`w-[50px] h-[50px] rounded-full z-10 overflow-hidden ${isSpecial ? 'bg-[#4B4B50]' : 'bg-donut-accent'} flex justify-center items-center`}>
+        <div className={`w-[50px] h-[50px] rounded-full z-10 overflow-hidden ${isCurrentUser ? 'bg-[#4B4B50]' : 'bg-donut-accent'} flex justify-center items-center`}>
           <Image 
             src={ranking.avatarUrl || '/home/profile.jpg'} 
             alt={ranking.username} 
@@ -96,11 +97,11 @@ const RankingListItem = ({ ranking }: { ranking: RankingItem }) => {
         </div>
         
         <div className="flex flex-col z-10">
-          <h3 className={`font-bold text-lg ${isSpecial ? 'text-black' : 'text-white'}`}>{ranking.username}</h3>
-          <p className={`text-xs ${isSpecial ? 'text-[#4B4B50]' : 'text-[#ABABAB]'}`}>{ranking.date}</p>
+          <h3 className={`font-bold text-lg ${isCurrentUser ? 'text-black' : 'text-white'}`}>{ranking.username}</h3>
+          <p className={`text-xs ${isCurrentUser ? 'text-[#4B4B50]' : 'text-[#ABABAB]'}`}>{ranking.date}</p>
         </div>
         
-        <span className={`font-semibold text-lg ml-auto z-10 ${isSpecial ? 'text-black' : 'text-white'}`}>{ranking.time}</span>
+        <span className={`font-semibold text-lg ml-auto z-10 ${isCurrentUser ? 'text-black' : 'text-white'}`}>{ranking.time}</span>
       </div>
     </div>
   );
@@ -125,6 +126,30 @@ export default function Rankings() {
   const [rankings, setRankings] = useState<RankingItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  
+  // 從 localStorage 獲取當前用戶 ID，然後使用 resultService 獲取完整用戶數據
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (typeof window !== 'undefined') {
+        const userResultId = localStorage.getItem('userResultId');
+        if (userResultId) {
+          try {
+            // 使用 resultService 獲取用戶數據
+            const userData = await resultService.getUserData(userResultId);
+            if (userData && userData.id) {
+              // 設置用戶的真正 ID
+              setCurrentUserId(userData.id.toString());
+            }
+          } catch (error) {
+            console.error('Error fetching user data:', error);
+          }
+        }
+      }
+    };
+    
+    fetchUserData();
+  }, []);
   
   // 從API獲取排名數據
   useEffect(() => {
@@ -293,7 +318,7 @@ export default function Rankings() {
       {/* 其他排名列表 */}
       <div className="w-full max-w-lg mx-auto flex flex-col gap-3">
         {otherRankings.map((ranking) => (
-          <RankingListItem key={ranking.id} ranking={ranking} />
+          <RankingListItem key={ranking.id} ranking={ranking} currentUserId={currentUserId} />
         ))}
       </div>
     </div>

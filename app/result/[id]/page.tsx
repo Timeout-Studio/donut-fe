@@ -63,15 +63,19 @@ const IndividualResultPage = ({ params }: PageProps) => {
 
 		loadData();
 
-		// 清除圖片 URL 資源
+		// 清除圖片 URL 資源 - 只在組件卸載時執行
 		return () => {
-			speciesImages.forEach((image) => {
-				if (image.blobUrl) {
-					URL.revokeObjectURL(image.blobUrl);
-				}
+			// 獲取當前的 speciesImages 快照來清理資源
+			setSpeciesImages(prevImages => {
+				prevImages.forEach((image) => {
+					if (image.blobUrl) {
+						URL.revokeObjectURL(image.blobUrl);
+					}
+				});
+				return prevImages;
 			});
 		};
-	}, [id, speciesImages]);
+	}, [id]);
 
 	// 保存結果 ID 到本地儲存
 	useEffect(() => {

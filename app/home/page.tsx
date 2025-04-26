@@ -45,7 +45,7 @@ export default function Home() {
     const handleScroll = () => {
       const scrollPosition = window.scrollY;
       const windowHeight = window.innerHeight;
-      
+
       // 從開始滾動就漸漸變暗，在滾動到半個螢幕高度時就達到最暗（0.3亮度）
       if (scrollPosition >= windowHeight / 2) {
         // 如果滾動超過半個螢幕高度，保持最暗（0.3）
@@ -68,7 +68,7 @@ export default function Home() {
         setLoadingRankings(true);
         // 調用API獲取所有排行榜數據
         const response = await rankingService.getAllRankings();
-        
+
         // 檢查API響應格式並處理數據
         let rankingsData: Record<string, unknown>[] = [];
         if (response && typeof response === 'object') {
@@ -80,11 +80,11 @@ export default function Home() {
           // 如果是對象，查找數據數組
           else {
             const apiResponse = response as unknown as ApiResponse;
-            
+
             // 首先檢查 _data 屬性 (根據截圖這是API返回的主要數據結構)
             if (apiResponse._data && Array.isArray(apiResponse._data)) {
               rankingsData = apiResponse._data;
-            } 
+            }
             // 備用選項
             else if (apiResponse.data && Array.isArray(apiResponse.data)) {
               rankingsData = apiResponse.data;
@@ -97,24 +97,24 @@ export default function Home() {
             }
           }
         }
-        
+
         // 將API返回的數據映射到我們需要的數據格式
         const formattedRankings: RankingItem[] = rankingsData.map((item: Record<string, unknown>, index: number) => {
           // 處理 player_id 作為用戶名，實際環境中這裡可能需要從別的地方獲取真實用戶名
           const playerId = item.player_id as string | number | undefined;
           const username = playerId ? `玩家 ${playerId}` : `未知玩家 ${index + 1}`;
-          
+
           // 處理日期，從created_at轉換
           const createdAt = item.created_at as number | undefined;
           const date = createdAt ? formatDate(createdAt) : '未知日期';
-          
+
           // 處理時間，從duration轉換為分:秒格式
           const duration = item.duration as number | undefined;
           const time = duration ? formatDuration(duration) : '00:00';
-          
+
           // 根據ID或索引生成排名
           const rank = index + 1;
-          
+
           return {
             id: item.id ? Number(item.id) : index + 1,
             rank,
@@ -124,26 +124,26 @@ export default function Home() {
             avatarUrl: '/home/profile.jpg' // 使用默認頭像
           };
         });
-        
+
         // 按duration排序
         const sortedRankings = formattedRankings.sort((a, b) => {
           // 解析時間 (格式為 MM:SS)
           const timeA = a.time.split(':').map(Number);
           const timeB = b.time.split(':').map(Number);
-          
+
           // 轉換為秒數進行比較
           const secondsA = timeA[0] * 60 + timeA[1];
           const secondsB = timeB[0] * 60 + timeB[1];
-          
+
           // 較短時間排在前面
           return secondsA - secondsB;
         });
-        
+
         // 更新排名順序
         sortedRankings.forEach((item, index) => {
           item.rank = index + 1;
         });
-        
+
         // 只保留前三名
         setTopRankings(sortedRankings.slice(0, 3));
       } catch (err) {
@@ -154,7 +154,7 @@ export default function Home() {
         setLoadingRankings(false);
       }
     };
-    
+
     fetchRankings();
   }, []);
 
@@ -164,7 +164,7 @@ export default function Home() {
     const first = topRankings.find(r => r.rank === 1);
     const second = topRankings.find(r => r.rank === 2);
     const third = topRankings.find(r => r.rank === 3);
-    
+
     // 按照設計需求的順序返回: 二、一、三
     return [second, first, third].filter(Boolean) as RankingItem[];
   };
@@ -175,12 +175,12 @@ export default function Home() {
     <div className="relative bg-[#1D1D1F] min-h-screen">
       {/* 背景圖片 - 覆蓋整個頁面，但z-index較低避免覆蓋footer */}
       <div className="fixed inset-0 w-full h-full z-0">
-        <div 
-          className="absolute inset-0 bg-black" 
+        <div
+          className="absolute inset-0 bg-black"
           style={{ opacity: 1 - scrollOpacity }}
         ></div>
-        <Image 
-          src="/home/background.jpg" 
+        <Image
+          src="/home/background.jpg"
           alt="Background"
           fill
           className="object-cover"
@@ -192,9 +192,9 @@ export default function Home() {
       {/* 中央Logo和介紹 - 佔滿一個螢幕高度 */}
       <div className="relative z-10 flex flex-col items-center justify-center h-screen px-6 w-full max-w-lg mx-auto">
         <div className="w-full max-w-[350px] relative mb-4">
-          <Image 
-            src="/home/Do-NUT_Logo_W.png" 
-            alt="Do-Nut Logo" 
+          <Image
+            src="/home/Do-NUT_Logo_W.png"
+            alt="Do-Nut Logo"
             width={700}
             height={310}
             className="w-full h-auto drop-shadow-lg"
@@ -209,11 +209,11 @@ export default function Home() {
 
       {/* 內容區域 */}
       <div className="relative z-10 px-6 pb-12 flex flex-col items-center">
-        <div className="max-w-md w-full flex flex-col gap-10">
+        <div className="max-w-md w-full flex flex-col gap-24">
           {/* 排行榜區塊 */}
           <section>
-            <h2 className="text-white text-[28px] font-bold mb-9">排行榜</h2>
-            
+            <h2 className="text-white text-[28px] font-bold mb-8">排行榜</h2>
+
             {loadingRankings ? (
               <div className="flex justify-center items-center py-10">
                 <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#44C2A5]"></div>
@@ -222,15 +222,15 @@ export default function Home() {
               <div className="flex justify-center items-end gap-4 mb-8">
                 {orderedTopThree.map((ranking, index) => {
                   const isFirst = index === 1; // 中間位置是第一名
-                  
+
                   return (
                     <div key={ranking.id} className="flex flex-col items-center gap-2 w-[120px]">
                       {isFirst ? (
-                        <Image 
-                          src="/home/crown.png" 
-                          alt="Crown" 
-                          width={40} 
-                          height={40} 
+                        <Image
+                          src="/home/crown.png"
+                          alt="Crown"
+                          width={40}
+                          height={40}
                           className="mb-1"
                         />
                       ) : (
@@ -238,17 +238,17 @@ export default function Home() {
                           <span className="text-white text-xl font-semibold">{ranking.rank}</span>
                         </div>
                       )}
-                      
+
                       <div className={`${isFirst ? 'w-[119px] h-[119px]' : 'w-[88px] h-[88px]'} bg-[#44C2A5] rounded-full overflow-hidden`}>
-                        <Image 
-                          src={ranking.avatarUrl} 
-                          alt="Profile" 
-                          width={isFirst ? 119 : 88} 
-                          height={isFirst ? 119 : 88} 
+                        <Image
+                          src={ranking.avatarUrl}
+                          alt="Profile"
+                          width={isFirst ? 119 : 88}
+                          height={isFirst ? 119 : 88}
                           className="object-cover"
                         />
                       </div>
-                      
+
                       <div className="flex flex-col items-center w-full">
                         <span className="text-white text-[22px] font-bold">{ranking.username}</span>
                         <span className="text-[#6C6D71] text-[10px]">{ranking.date}</span>
@@ -263,43 +263,82 @@ export default function Home() {
                 暫無排行榜數據
               </div>
             )}
-            
+
             <ReadMoreButton href="/rankings" />
-            </section>
+          </section>
 
           {/* 關於我們區塊 */}
           <section>
-            <h2 className="text-white text-[28px] font-bold mb-9">關於我們</h2>
-            <Image 
-              src="/Us.jpg" 
-              alt="About Us" 
+            <h2 className="text-white text-[28px] font-bold mb-8">關於我們</h2>
+            <Image
+              src="/Us.jpg"
+              alt="About Us"
               width={800}
-              height={150}
-              className="w-full h-[150px] rounded-[20px] mb-6 object-cover"
+              height={200}
+              className="w-full h-[200px] rounded-[20px] mb-6 object-cover"
             />
             <ReadMoreButton href="/about" />
           </section>
-          
+
           {/* 展場資訊區塊 */}
           <section>
-            <h2 className="text-white text-[28px] font-bold mb-9">展場資訊</h2>
-            <div className="flex flex-col gap-3 mb-6">
-              <h3 className="text-white text-2xl font-medium">校內展</h3>
-              <p className="text-white text-base">
-                時間｜𝟮𝟬𝟮𝟱.𝟬𝟰.𝟬𝟳-𝟮𝟬𝟮𝟱.𝟬𝟰.𝟭𝟮<br />
-                地點｜元智大學 五館三樓 及 六館玻璃屋
-              </p>
-              
-              <h3 className="text-white text-2xl font-medium mt-4">校外展</h3>
-              <p className="text-white text-base">
-                時間｜𝟮𝟬𝟮𝟱.𝟬𝟰.𝟮𝟱-𝟮𝟬𝟮𝟱.𝟬𝟰.𝟮𝟴<br />
-                地點｜松山文創園區三號倉庫
-              </p>
-              
-              <h3 className="text-white text-2xl font-medium mt-4">更多資訊</h3>
-              <p className="text-white text-base">
-                Instagram｜@donut_timeout
-              </p>
+            <h2 className="text-white text-[28px] font-bold mb-8">展場資訊</h2>
+            <div className="flex flex-col gap-6 mb-6">
+              {/* 校內展 */}
+              <div className="bg-[#252529] rounded-2xl p-5 transition-transform hover:translate-y-[-4px] duration-300">
+                <div className="flex items-center mb-3">
+                  <div className="w-1 h-6 bg-donut-accent rounded-full mr-3"></div>
+                  <h3 className="text-white text-xl font-semibold">校內展</h3>
+                </div>
+                <div className="pl-4">
+                  <div className="flex mb-2">
+                    <span className="text-[#9D9D9D] w-14">時間</span>
+                    <span className="text-white flex-1">𝟮𝟬𝟮𝟱.𝟬𝟰.𝟬𝟳-𝟮𝟬𝟮𝟱.𝟬𝟰.𝟭𝟮</span>
+                  </div>
+                  <div className="flex">
+                    <span className="text-[#9D9D9D] w-14">地點</span>
+                    <span className="text-white flex-1">元智大學 五館三樓 及 六館玻璃屋</span>
+                  </div>
+                </div>
+                <div className="mt-3 w-full h-[360px] rounded-lg overflow-hidden">
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3616.8629808860915!2d121.26527912608992!3d24.970776027857372!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x34681f548705509f%3A0x73f2ac8997f4acb4!2z5YWD5pm65YWt6aSo!5e0!3m2!1szh-TW!2stw!4v1745690365945!5m2!1szh-TW!2stw" width="100%" height="360" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+              </div>
+
+              {/* 校外展 */}
+              <div className="bg-[#252529] rounded-2xl p-5 transition-transform hover:translate-y-[-4px] duration-300">
+                <div className="flex items-center mb-3">
+                  <div className="w-1 h-6 bg-donut-accent rounded-full mr-3"></div>
+                  <h3 className="text-white text-xl font-semibold">校外展</h3>
+                </div>
+                <div className="pl-4">
+                  <div className="flex mb-2">
+                    <span className="text-[#9D9D9D] w-14">時間</span>
+                    <span className="text-white flex-1">𝟮𝟬𝟮𝟱.𝟬𝟰.𝟮𝟱-𝟮𝟬𝟮𝟱.𝟬𝟰.𝟮𝟴</span>
+                  </div>
+                  <div className="flex">
+                    <span className="text-[#9D9D9D] w-14">地點</span>
+                    <span className="text-white flex-1">松山文創園區三號倉庫</span>
+                  </div>
+                </div>
+                <div className="mt-3 w-full h-[360px] rounded-lg overflow-hidden">
+                  <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3614.69093544058!2d121.55990899999999!3d25.0445606!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3442abbf5f3784a5%3A0x48cdd6ccaf36318e!2z5p2-5bGx5paH5Ym15ZyS5Y2AIC0g5LiJ6Jmf5YCJ5bqr!5e0!3m2!1szh-TW!2stw!4v1745690562044!5m2!1szh-TW!2stw" width="100%" height="360" loading="lazy" referrerPolicy="no-referrer-when-downgrade"></iframe>
+                </div>
+              </div>
+
+              {/* 更多資訊 */}
+              <div className="bg-[#252529] rounded-2xl p-5">
+                <div className="flex items-center mb-3">
+                  <div className="w-1 h-6 bg-donut-accent rounded-full mr-3"></div>
+                  <h3 className="text-white text-xl font-semibold">更多資訊</h3>
+                </div>
+                <div className="pl-4">
+                  <div className="flex">
+                    <span className="text-[#9D9D9D] w-24">Instagram</span>
+                    <span className="text-donut-accent font-medium"><a href="https://www.instagram.com/donut_timeout/" target="_blank" rel="noopener noreferrer">@donut_timeout</a></span>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </div>

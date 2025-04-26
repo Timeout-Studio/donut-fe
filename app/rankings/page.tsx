@@ -13,6 +13,7 @@ interface RankingItem {
   date: string;
   time: string; // 時間格式如 "05:31"
   avatarUrl: string;
+  player_id?: number;
 }
 
 // API響應類型
@@ -75,7 +76,7 @@ const TopThreeItem = ({ ranking }: { ranking: RankingItem }) => {
 // 排名列表項目組件
 const RankingListItem = ({ ranking, currentUserId }: { ranking: RankingItem; currentUserId: string | null }) => {
   // 判斷是否是當前用戶的排名
-  const isCurrentUser = currentUserId && ranking.id.toString() === currentUserId;
+  const isCurrentUser = currentUserId && ranking.player_id?.toString() === currentUserId;
   
   return (
     <div className={`relative w-full flex items-center ${isCurrentUser && 'drop-shadow-[0_6px_8px_rgba(0,0,0,1)]'}`}>
@@ -194,7 +195,7 @@ export default function Rankings() {
         // 將API返回的數據映射到我們需要的數據格式
         const formattedRankings: RankingItem[] = rankingsData.map((item: Record<string, unknown>, index: number) => {
           // 處理 player_id 作為用戶名，實際環境中這裡可能需要從別的地方獲取真實用戶名
-          const playerId = item.player_id as string | number | undefined;
+          const playerId = item.player_id as number | undefined;
           const username = playerId ? `玩家 ${playerId}` : `未知玩家 ${index + 1}`;
           
           // 處理日期，從created_at轉換
@@ -214,7 +215,8 @@ export default function Rankings() {
             username,
             date,
             time,
-            avatarUrl: '/home/profile.jpg' // 使用默認頭像
+            avatarUrl: '/home/profile.jpg', // 使用默認頭像
+            player_id: playerId
           };
         });
         
@@ -253,7 +255,7 @@ export default function Rankings() {
   // 找出當前用戶的排名並設置
   useEffect(() => {
     if (rankings.length > 0 && currentUserId) {
-      const userRanking = rankings.find(r => r.id.toString() === currentUserId);
+      const userRanking = rankings.find(r => r.player_id?.toString() === currentUserId);
       if (userRanking) {
         setCurrentUserRanking(userRanking);
       }

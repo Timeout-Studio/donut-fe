@@ -180,7 +180,7 @@ export default function Species() {
   }, []);
   
   return (
-    <div className="flex flex-col py-11 bg-[#1D1D1F] min-h-screen">
+    <div className="flex flex-col py-11 min-h-screen">
       <div className="max-w-screen-md mx-auto w-full px-6">
         {/* 標題與分類選擇 */}
         <h1 className="text-[28px] font-bold text-white mb-9">總圖鑑</h1>

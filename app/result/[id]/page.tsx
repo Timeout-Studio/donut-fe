@@ -94,11 +94,11 @@ const IndividualResultPage = ({ params }: PageProps) => {
 
 	// 載入中顯示
 	if (loading) {
-		return <div className="min-h-screen bg-[#1E1E1E] text-white p-6">Loading...</div>;
+		return <div className="min-h-screen text-white p-6">Loading...</div>;
 	}
 
 	return (
-		<div className="min-h-screen bg-[#1E1E1E] text-white p-6">
+		<div className="min-h-screen text-white p-6">
 			{/* 頂部 ID 顯示區域 */}
 			<div className="text-center">
 				<h1 className="text-3xl font-bold mb-8">{userData?.username}</h1>

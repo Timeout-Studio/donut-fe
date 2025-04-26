@@ -41,7 +41,7 @@ export default function Footer() {
 			</div>
 
 			{/* 社群連結 */}
-			<p className="block text-center mb-6 lg:hidden"><span className="opacity-60">Follow us on&ensp;</span><span className="underline"><a target="_blank" href="https://www.instagram.com/donut_timeout/">Instagram</a></span></p>
+			<p className="block text-center mb-6 lg:hidden"><span className="opacity-60">Follow us on&ensp;</span><span className="underline text-donut-accent"><a target="_blank" href="https://www.instagram.com/donut_timeout/">Instagram</a></span></p>
 
 			{/* 版權信息 - 跨越整個寬度 */}
 			<p className="pt-6 text-donut-text-gray text-sm text-center border-t border-gray-700/40">

@@ -137,7 +137,10 @@ const IndividualResultPage = ({ params }: PageProps) => {
 								)}
 								<div className="font-bold">
 									{(parsedResults[0]?.duration || 0) % 60 < 10 && Math.floor((parsedResults[0]?.duration || 0) / 60) > 0 ? '0' : ''}
-									{((parsedResults[0]?.duration || 0) % 60).toFixed(1)}
+									{Math.floor((parsedResults[0]?.duration || 0) / 60) > 0
+										? Math.floor(((parsedResults[0]?.duration || 0) % 60))
+										: ((parsedResults[0]?.duration || 0) % 60).toFixed(1)
+									}
 								</div>
 								<div className="right-4 text-sm text-gray-400">秒</div>
 							</div>

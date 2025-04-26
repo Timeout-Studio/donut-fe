@@ -94,11 +94,11 @@ const IndividualResultPage = ({ params }: PageProps) => {
 
 	// 載入中顯示
 	if (loading) {
-		return <div className="min-h-screen bg-[#1E1E1E] text-white p-6">Loading...</div>;
+		return <div className="min-h-screen text-white p-6">Loading...</div>;
 	}
 
 	return (
-		<div className="min-h-screen bg-[#1E1E1E] text-white p-6">
+		<div className="min-h-screen text-white p-6">
 			{/* 頂部 ID 顯示區域 */}
 			<div className="text-center">
 				<h1 className="text-3xl font-bold mb-8">{userData?.username}</h1>
@@ -137,7 +137,10 @@ const IndividualResultPage = ({ params }: PageProps) => {
 								)}
 								<div className="font-bold">
 									{(parsedResults[0]?.duration || 0) % 60 < 10 && Math.floor((parsedResults[0]?.duration || 0) / 60) > 0 ? '0' : ''}
-									{((parsedResults[0]?.duration || 0) % 60).toFixed(1)}
+									{Math.floor((parsedResults[0]?.duration || 0) / 60) > 0
+										? Math.floor(((parsedResults[0]?.duration || 0) % 60))
+										: ((parsedResults[0]?.duration || 0) % 60).toFixed(1)
+									}
 								</div>
 								<div className="right-4 text-sm text-gray-400">秒</div>
 							</div>

@@ -19,42 +19,42 @@ const teamMembers: TeamMember[] = [
     name: '洪誼珊',
     role: '行銷',
     description: '為了重新引導人們認識並珍惜這些被忽視的自然聲音，我們製作了一個互動空間，搭配故事劇情，播放不同環境聲音。',
-    imageUrl: '/team-member-placeholder.png'
+    imageUrl: '/members/Sandy.jpg'
   },
   {
     id: 2,
     name: '朱維晞',
     role: '美術',
     description: '為了重新引導人們認識並珍惜這些被忽視的自然聲音，我們製作了一個互動空間，搭配故事劇情，播放不同環境聲音。',
-    imageUrl: '/team-member-placeholder.png'
+    imageUrl: '/members/April.jpg'
   },
   {
     id: 3,
     name: '林駿宇',
     role: '遊戲引擎',
     description: '為了重新引導人們認識並珍惜這些被忽視的自然聲音，我們製作了一個互動空間，搭配故事劇情，播放不同環境聲音。',
-    imageUrl: '/team-member-placeholder.png'
+    imageUrl: '/members/Max.jpg'
   },
   {
     id: 4,
     name: '羅建毅',
     role: '後端、硬體',
     description: '為了重新引導人們認識並珍惜這些被忽視的自然聲音，我們製作了一個互動空間，搭配故事劇情，播放不同環境聲音。',
-    imageUrl: '/team-member-placeholder.png'
+    imageUrl: '/members/Aaron.jpg'
   },
   {
     id: 5,
     name: '朱家芸',
     role: '硬體、場景設計',
     description: '為了重新引導人們認識並珍惜這些被忽視的自然聲音，我們製作了一個互動空間，搭配故事劇情，播放不同環境聲音。',
-    imageUrl: '/team-member-placeholder.png'
+    imageUrl: '/members/Ariel.jpg'
   },
   {
     id: 6,
     name: '惠維慶',
     role: '專案管理、硬體',
     description: '為了重新引導人們認識並珍惜這些被忽視的自然聲音，我們製作了一個互動空間，搭配故事劇情，播放不同環境聲音。',
-    imageUrl: '/team-member-placeholder.png'
+    imageUrl: '/members/Hui.jpg'
   }
 ];
 
@@ -99,8 +99,8 @@ const TeamMemberCard = ({ member, isReversed = false }: { member: TeamMember, is
 
 export default function About() {
   return (
-    <div className="flex flex-col px-4 sm:px-6 md:px-8 py-8 md:py-11 bg-[#1D1D1F] min-h-screen">
-      <div className="w-full max-w-[1200px] mx-auto mb-6">
+    <div className="flex flex-col px-4 sm:px-6 md:px-8 py-8 md:py-11 min-h-screen">
+      <div className="w-full max-w-[1200px] mx-auto mb-10">
         <Image 
           src="/Us.jpg" 
           alt="About Us Banner" 

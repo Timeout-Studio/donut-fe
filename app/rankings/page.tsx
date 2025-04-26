@@ -78,13 +78,13 @@ const RankingListItem = ({ ranking, currentUserId }: { ranking: RankingItem; cur
   const isCurrentUser = currentUserId && ranking.id.toString() === currentUserId;
   
   return (
-    <div className="relative w-full flex items-center">
+    <div className={`relative w-full flex items-center ${isCurrentUser && 'drop-shadow-[0_6px_8px_rgba(0,0,0,1)]'}`}>
       {/* 排名數字 - 放在pill外部 */}
       <span className="font-semibold text-lg text-white z-10 mr-5 w-6 text-center">{ranking.rank}</span>
       
       {/* pill背景 */}
       <div className="relative flex-1 flex items-center gap-5 ps-3 py-3 px-5">
-        <div className={`absolute inset-0 rounded-full ${isCurrentUser ? 'bg-[#A6E8D9]' : 'bg-[#4B4B50]'}`} />
+        <div className={`absolute inset-0 rounded-full ${isCurrentUser ? 'bg-donut-accent' : 'bg-[#4B4B50]'}`} />
         
         <div className={`w-[50px] h-[50px] rounded-full z-10 overflow-hidden ${isCurrentUser ? 'bg-[#4B4B50]' : 'bg-donut-accent'} flex justify-center items-center`}>
           <Image 
@@ -97,11 +97,11 @@ const RankingListItem = ({ ranking, currentUserId }: { ranking: RankingItem; cur
         </div>
         
         <div className="flex flex-col z-10">
-          <h3 className={`font-bold text-lg ${isCurrentUser ? 'text-black' : 'text-white'}`}>{ranking.username}</h3>
-          <p className={`text-xs ${isCurrentUser ? 'text-[#4B4B50]' : 'text-[#ABABAB]'}`}>{ranking.date}</p>
+          <h3 className="font-bold text-lg texrt-white">{ranking.username}</h3>
+          <p className={`text-xs ${isCurrentUser ? 'text-black' : 'text-[#ABABAB]'}`}>{ranking.date}</p>
         </div>
         
-        <span className={`font-semibold text-lg ml-auto z-10 ${isCurrentUser ? 'text-black' : 'text-white'}`}>{ranking.time}</span>
+        <span className={`font-semibold text-lg ml-auto z-10 text-white`}>{ranking.time}</span>
       </div>
     </div>
   );
@@ -127,6 +127,7 @@ export default function Rankings() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [currentUserId, setCurrentUserId] = useState<string | null>(null);
+  const [currentUserRanking, setCurrentUserRanking] = useState<RankingItem | null>(null);
   
   // 從 localStorage 獲取當前用戶 ID，然後使用 resultService 獲取完整用戶數據
   useEffect(() => {
@@ -249,6 +250,16 @@ export default function Rankings() {
     fetchRankings();
   }, []);
   
+  // 找出當前用戶的排名並設置
+  useEffect(() => {
+    if (rankings.length > 0 && currentUserId) {
+      const userRanking = rankings.find(r => r.id.toString() === currentUserId);
+      if (userRanking) {
+        setCurrentUserRanking(userRanking);
+      }
+    }
+  }, [rankings, currentUserId]);
+  
   // 如果正在加載，顯示加載動畫
   if (loading) {
     return (
@@ -292,10 +303,13 @@ export default function Rankings() {
   };
   
   const topThree = getTopThreeOrdered();
-  const otherRankings = rankings.filter(r => r.rank > 3);
+  const otherRankings = rankings.filter(r => r.rank > 3 && r.rank <= 20);
+  
+  // 檢查當前用戶是否在前20名之外
+  const userOutsideTop20 = currentUserRanking && currentUserRanking.rank > 20;
 
   return (
-    <div className="flex flex-col items-center px-4 sm:px-6 py-6 sm:py-10 bg-[#1D1D1F] min-h-screen">
+    <div className="flex flex-col items-center px-4 sm:px-6 py-6 sm:py-10 min-h-screen relative">
       {/* 前三名 - 在所有屏幕尺寸下橫向顯示 */}
       <div className="flex flex-row justify-center items-end w-full mb-8 sm:mb-12 gap-0">
         {topThree.map((ranking, index) => (
@@ -315,12 +329,22 @@ export default function Rankings() {
         ))}
       </div>
       
-      {/* 其他排名列表 */}
+      {/* 其他排名列表（4-20名） */}
       <div className="w-full max-w-lg mx-auto flex flex-col gap-3">
         {otherRankings.map((ranking) => (
           <RankingListItem key={ranking.id} ranking={ranking} currentUserId={currentUserId} />
         ))}
       </div>
+      
+      {/* 如果用戶排名在20名以外，顯示固定在底部的排名 */}
+      {userOutsideTop20 && currentUserRanking && (
+        <div className="w-full mt-auto pt-3 sticky bottom-0 left-0 right-0 z-10">
+          <div className="w-full max-w-lg mx-auto">
+            <RankingListItem ranking={currentUserRanking} currentUserId={currentUserId || currentUserRanking.id.toString()} />
+          </div>
+          <div className="h-4"></div> {/* 底部間距 */}
+        </div>
+      )}
     </div>
   );
 }

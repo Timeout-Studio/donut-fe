@@ -101,7 +101,7 @@ const IndividualResultPage = ({ params }: PageProps) => {
 		<div className="min-h-screen text-white p-6">
 			{/* 頂部 ID 顯示區域 */}
 			<div className="text-center">
-				<h1 className="text-3xl font-bold mb-8">{userData?.username}</h1>
+				<h1 className="text-3xl font-bold mt-4 mb-6">玩家 {userData?.id}</h1>
 			</div>
 
 			{/* 個人資料顯示區域 */}
@@ -118,7 +118,7 @@ const IndividualResultPage = ({ params }: PageProps) => {
 				</div>
 
 				{/* 等級顯示 */}
-				<div className="bg-donut-accent rounded-full px-8 py-2">
+				<div className="bg-donut-accent rounded-full px-8 py-2 mb-4">
 					<h2 className="text-donut-text-white text-2xl font-bold">{userMainOrganism?.name}</h2>
 				</div>
 

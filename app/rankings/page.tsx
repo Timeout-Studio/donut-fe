@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Suspense } from 'react';
 import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 import rankingService from '../api/services/rankingService';
@@ -132,7 +132,8 @@ const getAvatarUrl = (organism_id: string | undefined) => {
   return `https://api.timeout-studio.com/file/${organism_id}/download`;
 };
 
-export default function Rankings() {
+// 為了解決useSearchParams需要Suspense包裹的問題，創建一個內部組件
+function RankingsContent() {
   const searchParams = useSearchParams();
   const playerIdParam = searchParams.get('playerId');
   
@@ -413,5 +414,14 @@ export default function Rankings() {
         </div>
       )}
     </div>
+  );
+}
+
+// 主排名頁面組件，將內部組件包裹在Suspense中
+export default function Rankings() {
+  return (
+    <Suspense fallback={<LoadingSpinner />}>
+      <RankingsContent />
+    </Suspense>
   );
 }

@@ -13,6 +13,11 @@ interface PageProps {
 	}>;
 }
 
+// 骨架屏組件
+const ImageSkeleton = ({ className = "" }: { className?: string }) => (
+	<div className={`animate-pulse rounded-full overflow-hidden bg-gray-600 ${className}`}></div>
+);
+
 // 個人結果頁面組件
 const IndividualResultPage = ({ params }: PageProps) => {
 	const resolvedParams = use(params);
@@ -23,6 +28,7 @@ const IndividualResultPage = ({ params }: PageProps) => {
 	const [speciesImages, setSpeciesImages] = useState<SpeciesImage[]>([]);
 	const [organisms, setOrganisms] = useState<Species[]>([]);
 	const [loading, setLoading] = useState(true);
+	const [imagesLoading, setImagesLoading] = useState(true);
 	const [ranking, setRanking] = useState<number | null>(null);
 	const [totalPlayers, setTotalPlayers] = useState<number>(0);
 
@@ -50,14 +56,21 @@ const IndividualResultPage = ({ params }: PageProps) => {
 					const organismsData = await speciesService.getAllSpecies();
 					setOrganisms(organismsData);
 
-					// 使用生物資料獲取圖片
+					// 完成基本資料載入
+					setLoading(false);
+
+					// 使用生物資料獲取圖片 (圖片可以在基本資料顯示後再載入)
 					const images = await resultService.fetchImages(organismsData);
 					setSpeciesImages(images);
+					setImagesLoading(false);
+				} else {
+					setLoading(false);
+					setImagesLoading(false);
 				}
 			} catch (error) {
 				console.error("Error loading data:", error);
-			} finally {
 				setLoading(false);
+				setImagesLoading(false);
 			}
 		};
 
@@ -108,18 +121,22 @@ const IndividualResultPage = ({ params }: PageProps) => {
 			<div className="flex flex-col items-center mb-8">
 				{/* 大頭貼顯示 */}
 				<div className="w-32 h-32 rounded-full bg-white overflow-hidden mb-4">
-					<Image
-						src={userAvatarImage?.blobUrl || "/path-to-default-avatar.png"}
-						alt={userMainOrganism?.name || userData?.username || "User avatar"}
-						width={128}
-						height={128}
-						className="object-contain w-full h-full"
-					/>
+					{imagesLoading || !userAvatarImage?.blobUrl ? (
+						<ImageSkeleton className="w-full h-full rounded-full" />
+					) : (
+						<Image
+							src={userAvatarImage?.blobUrl || "/path-to-default-avatar.png"}
+							alt={userMainOrganism?.name || userData?.username || "User avatar"}
+							width={128}
+							height={128}
+							className="object-contain w-full h-full"
+						/>
+					)}
 				</div>
 
 				{/* 等級顯示 */}
 				<div className="bg-donut-accent rounded-full px-8 py-2 mb-4">
-					<h2 className="text-donut-text-white text-2xl font-bold">{userMainOrganism?.name}</h2>
+					<h2 className="text-donut-text-white text-2xl font-bold">{userMainOrganism?.name || "載入中..."}</h2>
 				</div>
 
 				{/* 遊玩數據 */}
@@ -177,14 +194,18 @@ const IndividualResultPage = ({ params }: PageProps) => {
 						return (
 							<div key={organism.name} className="flex flex-col items-center gap-2 min-w-[120px]">
 								<BirdItem isLocked={isLocked}>
-									<Image
-										src={currentImage?.blobUrl || "/path-to-default-bird.png"}
-										alt={organism.name}
-										width={100}
-										height={100}
-										style={{ width: "100px", height: "100px" }}
-										className={`object-contain ${isLocked ? "saturate-0 opacity-50" : ""}`}
-									/>
+									{imagesLoading || !currentImage?.blobUrl ? (
+										<ImageSkeleton className="w-[100px] h-[100px] rounded-full" />
+									) : (
+										<Image
+											src={currentImage?.blobUrl || "/path-to-default-bird.png"}
+											alt={organism.name}
+											width={100}
+											height={100}
+											style={{ width: "100px", height: "100px" }}
+											className={`object-contain ${isLocked ? "saturate-0 opacity-50" : ""}`}
+										/>
+									)}
 								</BirdItem>
 								<span className={`text-sm text-center ${isLocked ? "text-gray-500" : ""}`}>{isLocked ? "???" : organism.name}</span>
 							</div>

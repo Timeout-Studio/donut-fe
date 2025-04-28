@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 import rankingService from '../api/services/rankingService';
 import resultService from '../api/services/resultService';
 
@@ -123,7 +124,18 @@ function formatDate(timestamp: number): string {
   return `${date.getFullYear()}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getDate().toString().padStart(2, '0')}`;
 }
 
+// 獲取生物頭像URL
+const getAvatarUrl = (organism_id: string | undefined) => {
+  if (!organism_id) return '/home/profile.jpg';
+  
+  // 直接返回API圖片URL
+  return `https://api.timeout-studio.com/file/${organism_id}/download`;
+};
+
 export default function Rankings() {
+  const searchParams = useSearchParams();
+  const playerIdParam = searchParams.get('playerId');
+  
   const [rankings, setRankings] = useState<RankingItem[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -133,6 +145,13 @@ export default function Rankings() {
   // 從 localStorage 獲取當前用戶 ID，然後使用 resultService 獲取完整用戶數據
   useEffect(() => {
     const fetchUserData = async () => {
+      // 優先使用URL參數中的playerId
+      if (playerIdParam) {
+        console.log('Using player ID from URL:', playerIdParam);
+        setCurrentUserId(playerIdParam);
+        return;
+      }
+      
       if (typeof window !== 'undefined') {
         const userResultId = localStorage.getItem('userResultId');
         if (userResultId) {
@@ -141,6 +160,7 @@ export default function Rankings() {
             const userData = await resultService.getUserData(userResultId);
             if (userData && userData.id) {
               // 設置用戶的真正 ID
+              console.log('Setting current user ID from localStorage:', userData.id.toString());
               setCurrentUserId(userData.id.toString());
             }
           } catch (error) {
@@ -151,7 +171,7 @@ export default function Rankings() {
     };
     
     fetchUserData();
-  }, []);
+  }, [playerIdParam]);
   
   // 從API獲取排名數據
   useEffect(() => {
@@ -215,7 +235,7 @@ export default function Rankings() {
             username,
             date,
             time,
-            avatarUrl: '/home/profile.jpg', // 使用默認頭像
+            avatarUrl: getAvatarUrl(item.organism_id as string | undefined),
             player_id: playerId
           };
         });
@@ -254,13 +274,55 @@ export default function Rankings() {
   
   // 找出當前用戶的排名並設置
   useEffect(() => {
-    if (rankings.length > 0 && currentUserId) {
-      const userRanking = rankings.find(r => r.player_id?.toString() === currentUserId);
-      if (userRanking) {
-        setCurrentUserRanking(userRanking);
+    const fetchUserRanking = async () => {
+      const playerId = localStorage.getItem('userResultId');
+      
+      // 如果playerId為null，提前返回
+      if (!playerId) {
+        console.log('No user result ID found in localStorage');
+        return;
       }
-    }
-  }, [rankings, currentUserId]);
+      
+      console.log('Fetching user ranking for ID:', playerId);
+      
+      try {
+        // 獲取用戶的數據
+        const userData = await resultService.getUserData(playerId);
+        console.log(userData);
+        if (!userData || !userData.result || userData.result.length === 0) {
+          console.log('No user data or results available');
+          return;
+        }
+        
+        // 使用 resultService.getRanking 直接從 API 獲取排名
+        const resultId = userData.result[0].id.toString();
+        const rank = await resultService.getRanking(resultId);
+        
+        if (rank !== null) {
+          console.log('Fetched user ranking from API:', rank);
+          
+          // 創建用戶排名項目
+          const userRanking: RankingItem = {
+            id: Number(userData.id),
+            rank: rank,
+            username: userData.username || `玩家 ${userData.id}`,
+            date: formatDate(Date.now() / 1000), // 使用當前日期
+            time: formatDuration(userData.result[0].duration),
+            avatarUrl: getAvatarUrl(userData.result[0].organism_id),
+            player_id: Number(userData.id)
+          };
+          
+          setCurrentUserRanking(userRanking);
+        } else {
+          console.log('Failed to get user ranking from API');
+        }
+      } catch (error) {
+        console.error('Error fetching user ranking:', error);
+      }
+    };
+    
+    fetchUserRanking();
+  }, [currentUserId]);
   
   // 如果正在加載，顯示加載動畫
   if (loading) {
@@ -309,6 +371,9 @@ export default function Rankings() {
   
   // 檢查當前用戶是否在前20名之外
   const userOutsideTop20 = currentUserRanking && currentUserRanking.rank > 20;
+  
+  console.log('Current user ranking:', currentUserRanking);
+  console.log('User outside top 20:', userOutsideTop20);
 
   return (
     <div className="flex flex-col items-center px-4 sm:px-6 py-6 sm:py-10 min-h-screen relative">
@@ -338,11 +403,11 @@ export default function Rankings() {
         ))}
       </div>
       
-      {/* 如果用戶排名在20名以外，顯示固定在底部的排名 */}
+      {/* 如果用戶排名在20名之外，顯示固定在底部的排名 */}
       {userOutsideTop20 && currentUserRanking && (
         <div className="w-full mt-auto pt-3 sticky bottom-0 left-0 right-0 z-10">
           <div className="w-full max-w-lg mx-auto">
-            <RankingListItem ranking={currentUserRanking} currentUserId={currentUserId || currentUserRanking.id.toString()} />
+            <RankingListItem ranking={currentUserRanking} currentUserId={currentUserId} />
           </div>
           <div className="h-4"></div> {/* 底部間距 */}
         </div>

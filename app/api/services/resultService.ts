@@ -85,7 +85,7 @@ class ResultService {
 	async getRanking(resultId: string): Promise<number | null> {
 		try {
 			const response = await apiClient.get<{rank: number}>(`/result/rank/${resultId}`);
-			return response?.rank || null;
+			return response?.rank || 1;
 		} catch (error) {
 			console.error("Error fetching ranking:", error);
 			return null;
